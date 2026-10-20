@@ -1,0 +1,40 @@
+name: Actualizar desde la planilla
+
+on:
+  schedule:
+    - cron: "*/15 * * * *"   # cada 15 minutos (GitHub puede demorarlo unos minutos)
+  workflow_dispatch:          # botón "Run workflow" para actualizar al instante
+
+permissions:
+  contents: write
+  pages: write
+
+concurrency:
+  group: actualizar
+  cancel-in-progress: false
+
+jobs:
+  actualizar:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Leer la planilla y armar la página
+        run: |
+          python3 actualizar.py
+          python3 armar.py
+
+      - name: Publicar si algo cambió
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          git add -A
+          if git diff --cached --quiet; then
+            echo "La planilla no cambió."
+            exit 0
+          fi
+          git config user.name "griyata-bot"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m "Actualización automática desde la planilla"
+          git push
+          gh api -X POST "repos/${{ github.repository }}/pages/builds" > /dev/null || true

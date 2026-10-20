@@ -45,7 +45,7 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 .controls .bar{display:flex;flex-wrap:wrap;gap:14px 18px;align-items:center;justify-content:center}
 .mini-logo{flex:none;display:block;width:140px;line-height:0;opacity:0;transform:translateY(-6px);pointer-events:none;
   transition:opacity 200ms var(--ease-out),transform 200ms var(--ease-out)}
-.mini-logo img{width:100%;height:auto;filter:var(--logo-filter)}
+.mini-img{display:block;width:100%;aspect-ratio:900/351;background:center/contain no-repeat;filter:var(--logo-filter)}
 body.scrolled .mini-logo{opacity:1;transform:none;pointer-events:auto}
 body.scrolled .controls{box-shadow:0 10px 18px -14px var(--lo)}
 .filt{position:relative;height:50px;padding:0 20px}
@@ -97,6 +97,8 @@ main{padding-block:12px 64px}
 .well{border:0;padding:0;width:100%;cursor:zoom-in;border-radius:var(--r-md);background:var(--well);box-shadow:var(--in);aspect-ratio:1/1;max-width:100%;display:grid;place-items:center;overflow:hidden;
   transition:transform 160ms var(--ease-out)}
 .well:active{transform:scale(0.98)}
+.well.no-photo{cursor:default;color:var(--muted);font-size:13px;font-weight:500}
+.well.no-photo:active{transform:none}
 .well:focus-visible{outline:2px solid var(--accent);outline-offset:4px}
 
 /* zoom: a modal, so it scales from the centre */
@@ -196,7 +198,7 @@ footer{padding-block:24px 56px}
 
 <div class="controls" id="controls">
   <div class="wrap bar">
-    <a class="mini-logo" href="#top" aria-label="Griyata Parfums, volver arriba" tabindex="-1"><img id="miniLogo" width="900" height="351" alt=""></a>
+    <a class="mini-logo" href="#top" aria-label="Griyata Parfums, volver arriba" tabindex="-1"><span id="miniLogo" class="mini-img"></span></a>
     <label class="search" for="q">
       <span class="sr">Buscar por nombre, marca o nota</span>
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
@@ -323,13 +325,15 @@ function clearFilters(){
 $("clear").addEventListener("click", clearFilters);
 
 // the small logo reuses the big one's image and appears once the big one has scrolled away
-$("miniLogo").src = document.querySelector(".brand img").src;
+$("miniLogo").style.backgroundImage = `url("${document.querySelector(".brand img").src}")`;
 new IntersectionObserver(([e])=>document.body.classList.toggle("scrolled", !e.isIntersecting), {rootMargin:"-40px 0px 0px 0px"}).observe(document.querySelector(".brand"));
 
 const priceHtml = p => `<div class="price num"><div class="cash"><b>${fmt(p.c)}</b><small>contado</small></div><div class="card-p"><span>${fmt(p.t)}</span><small>tarjeta</small></div></div>`;
 function cardHtml(p){
   return `<article class="card">
-    <button class="well" type="button" data-i="${p.i}" aria-label="Ver ${esc(p.n)} más grande"><img src="${IMGS[p.i]}" alt="Frasco de ${esc(p.n)}" loading="lazy"></button>
+    ${IMGS[p.i]
+      ? `<button class="well" type="button" data-i="${p.i}" aria-label="Ver ${esc(p.n)} más grande"><img src="${IMGS[p.i]}" alt="Frasco de ${esc(p.n)}" loading="lazy"></button>`
+      : `<div class="well no-photo">Foto próximamente</div>`}
     ${p.b?`<p class="brand-line">${esc(p.b)}</p>`:""}
     <h3>${esc(p.n)}</h3>
     <p class="notes">${esc((p.notes||"").split("·").map(x=>x.trim()).join(", "))}</p>

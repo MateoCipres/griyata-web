@@ -5,7 +5,9 @@ echo.
 echo === Publicar el catalogo de Griyata Parfums ===
 echo.
 
-echo 1/3  Armando la pagina...
+echo 1/3  Bajando la ultima version y armando la pagina...
+git pull -q --rebase --autostash
+if errorlevel 1 goto error
 python armar.py
 if errorlevel 1 goto error
 
