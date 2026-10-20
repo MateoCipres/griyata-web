@@ -8,4 +8,4 @@ Catálogo web de Griyata Parfums: perfumes árabes originales, sellados de fábr
 - `fuente/marcas.json`: la marca de cada perfume (por nombre).
 - `fuente/fotos/`, `fuente/logo.png`: imágenes.
 
-Para regenerar la página después de un cambio: `python armar.py`
+Para publicar un cambio: doble clic en `publicar.bat` (arma la página, guarda y sube a GitHub).
