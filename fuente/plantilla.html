@@ -1,0 +1,271 @@
+<title>Griyata Parfums</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap">
+<style>
+/* Layout: soft UI (neumorphism). One grey material; every surface is pushed out of it or pressed into it. A single plum accent marks actions. */
+:root{
+  --bg:#e7e8ee; --hi:#ffffff; --lo:#c3c6d2; --well:#e1e2e9;
+  --ink:#24252e; --muted:#5b5e6e; --accent:#8a2a8f; --accent-ink:#ffffff; --accent-soft:#f1e3f2;
+  --face:"Montserrat","Avenir Next","Segoe UI",system-ui,sans-serif;
+  --logo-filter:none; --r-lg:28px; --r-md:20px; --r-pill:999px;
+  --out:8px 8px 18px var(--lo),-8px -8px 18px var(--hi);
+  --out-sm:4px 4px 10px var(--lo),-4px -4px 10px var(--hi);
+  --in:inset 5px 5px 10px var(--lo),inset -5px -5px 10px var(--hi);
+  --in-sm:inset 3px 3px 6px var(--lo),inset -3px -3px 6px var(--hi);
+  --ease-out:cubic-bezier(0.23,1,0.32,1);
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#262830; --hi:#30333d; --lo:#1a1b21; --well:#22242b;
+  --ink:#eceef4; --muted:#a9acbb; --accent:#d58bd9; --accent-ink:#1d1420; --accent-soft:#3a2c3d; --logo-filter:invert(0.93); color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#262830; --hi:#30333d; --lo:#1a1b21; --well:#22242b;
+  --ink:#eceef4; --muted:#a9acbb; --accent:#d58bd9; --accent-ink:#1d1420; --accent-soft:#3a2c3d; --logo-filter:invert(0.93); color-scheme:dark}
+
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--ink);font-family:var(--face);font-size:16px;line-height:1.5;-webkit-font-smoothing:antialiased;-webkit-tap-highlight-color:transparent}
+::selection{background:var(--accent);color:var(--accent-ink)}
+:focus-visible{outline:2px solid var(--accent);outline-offset:4px}
+button,input{font:inherit;color:inherit}
+.wrap{max-width:1180px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.num{font-variant-numeric:tabular-nums}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+/* header */
+header{padding-block:clamp(36px,6vw,72px) 8px;display:grid;justify-items:center;text-align:center;gap:18px}
+.brand{margin:0;line-height:0}
+.brand img{width:min(400px,82vw);height:auto;filter:var(--logo-filter)}
+.intro{margin:0;max-width:44ch;color:var(--ink);font-size:clamp(15px,1.4vw,17px)}
+
+/* controls */
+.controls{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);padding-block:18px}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--bg)}
+.controls .wrap{display:flex;flex-wrap:wrap;gap:14px 18px;align-items:center;justify-content:center}
+.search{flex:1 1 300px;max-width:440px;position:relative}
+.search input{width:100%;height:50px;border:0;border-radius:var(--r-pill);background:var(--bg);box-shadow:var(--in);padding:0 20px 0 50px;font-size:16px;outline-offset:2px}
+.search input::placeholder{color:var(--muted)}
+.search svg{position:absolute;left:20px;top:50%;transform:translateY(-50%);color:var(--muted)}
+.seg{display:flex;padding:5px;border-radius:var(--r-pill);background:var(--bg);box-shadow:var(--in-sm)}
+.seg button{border:0;background:transparent;border-radius:var(--r-pill);padding:0 16px;height:40px;font-size:14px;font-weight:600;color:var(--muted);cursor:pointer;
+  transition:color 160ms ease,box-shadow 200ms var(--ease-out),transform 160ms var(--ease-out)}
+.seg button[aria-pressed="true"]{color:var(--ink);background:var(--bg);box-shadow:var(--out-sm)}
+.seg button:active{transform:scale(0.96)}
+
+/* catalogue */
+main{padding-block:12px 64px}
+.group{padding-top:56px}
+.group h2{margin:0 0 22px;font-size:clamp(24px,2.6vw,30px);font-weight:600;display:flex;align-items:baseline;gap:10px}
+.group h2 span{font-size:14px;font-weight:500;color:var(--muted)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(200px,100%),1fr));gap:28px}
+.card{background:var(--bg);border-radius:var(--r-lg);box-shadow:var(--out);padding:16px 16px 18px;display:flex;flex-direction:column;gap:14px;min-width:0}
+.well{border:0;padding:0;width:100%;cursor:zoom-in;border-radius:var(--r-md);background:var(--well);box-shadow:var(--in);aspect-ratio:1/1;max-width:100%;display:grid;place-items:center;overflow:hidden;
+  transition:transform 160ms var(--ease-out)}
+.well:active{transform:scale(0.98)}
+.well:focus-visible{outline:2px solid var(--accent);outline-offset:4px}
+
+/* zoom: a modal, so it scales from the centre */
+.zoom{border:0;padding:0;background:var(--bg);color:var(--ink);border-radius:var(--r-lg);box-shadow:var(--out);width:min(94vw,760px);max-width:none;max-height:none;height:min(92svh,980px);overflow:hidden;
+  opacity:1;transform:none;transition:opacity 220ms var(--ease-out),transform 220ms var(--ease-out),overlay 220ms allow-discrete,display 220ms allow-discrete}
+@starting-style{.zoom[open]{opacity:0;transform:scale(0.95)}}
+.zoom.closing{opacity:0;transform:scale(0.97);transition-duration:150ms}
+.zoom::backdrop{background:rgb(20 20 28 / 0.55)}
+.zoom-in{height:100%;display:grid;grid-template-rows:minmax(0,1fr) auto;gap:16px;padding:16px}
+.zoom-img{border-radius:var(--r-md);background:var(--well);box-shadow:var(--in);display:grid;place-items:center;min-height:0;overflow:hidden;cursor:zoom-out}
+.zoom-img img{width:auto;height:94%;max-width:94%;object-fit:contain}
+.zoom-info{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:12px 20px;padding:4px 6px 6px}
+.zoom-info h2{margin:0 0 4px;font-size:clamp(20px,2.4vw,26px);font-weight:600;line-height:1.2}
+.zoom-info p{margin:0 0 10px;color:var(--muted);font-size:14px}
+.zoom-info .wa{padding:0 22px}
+.zoom-close{position:absolute;top:26px;right:26px;width:44px;height:44px;border-radius:50%;border:0;background:var(--bg);color:var(--ink);box-shadow:var(--out-sm);display:grid;place-items:center;cursor:pointer;
+  transition:box-shadow 160ms ease,transform 160ms var(--ease-out)}
+.zoom-close:active{box-shadow:var(--in-sm);transform:scale(0.95)}
+body:has(.zoom[open]){overflow:hidden}
+.well img{width:72%;height:82%;object-fit:contain;transition:transform 300ms var(--ease-out)}
+.card h3{margin:0;font-size:16px;font-weight:600;line-height:1.3;text-wrap:balance}
+.notes{margin:-8px 0 0;color:var(--muted);font-size:14px;line-height:1.4}
+.foot{margin-top:auto;display:grid;gap:14px}
+.price{display:flex;align-items:flex-end;gap:6px 14px;flex-wrap:wrap;line-height:1.15}
+.price div{display:grid}
+.price .cash b{font-size:22px;font-weight:700;letter-spacing:-0.01em}
+.price .card-p span{font-size:14px;font-weight:500;color:var(--muted)}
+.price small{font-size:13px;color:var(--muted);font-weight:500}
+.wa-short{display:none}
+.wa{display:flex;align-items:center;justify-content:center;gap:8px;height:44px;border-radius:var(--r-pill);background:var(--bg);color:var(--accent);box-shadow:var(--out-sm);
+  font-size:14px;font-weight:600;text-decoration:none;transition:box-shadow 160ms ease,transform 160ms var(--ease-out),background-color 160ms ease,color 160ms ease}
+.wa:active{box-shadow:var(--in-sm);transform:scale(0.96)}
+@media (hover:hover) and (pointer:fine){
+  .card:hover .well img{transform:scale(1.05)}
+  .wa:hover{color:var(--accent-ink);background:var(--accent)}
+  .seg button:hover{color:var(--ink)}
+}
+.empty{text-align:center;color:var(--muted);padding:56px 0 0;max-width:40ch;margin:0 auto}
+
+/* footer */
+footer{padding-block:24px 56px}
+.panel{background:var(--bg);border-radius:var(--r-lg);box-shadow:var(--out);padding:clamp(24px,4vw,40px);display:grid;grid-template-columns:repeat(auto-fit,minmax(min(260px,100%),1fr));gap:24px 40px;align-items:start}
+.panel h2{margin:0 0 8px;font-size:20px;font-weight:600}
+.panel p{margin:0;color:var(--muted)}
+.phone{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-top:12px}
+.phone span{font-weight:700;font-size:18px;color:var(--ink)}
+.btn{border:0;border-radius:var(--r-pill);height:44px;padding:0 20px;background:var(--bg);box-shadow:var(--out-sm);font-weight:600;font-size:14px;cursor:pointer;color:var(--ink);text-decoration:none;display:inline-flex;align-items:center;gap:8px;
+  transition:box-shadow 160ms ease,transform 160ms var(--ease-out)}
+.btn:active{box-shadow:var(--in-sm);transform:scale(0.97)}
+.btn.primary{background:var(--accent);color:var(--accent-ink);box-shadow:var(--out-sm)}
+.imprint{text-align:center;color:var(--muted);font-size:13px;margin:28px 0 0}
+
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important}}
+@media (max-width:560px){
+  .controls{padding-block:12px}
+  .controls .wrap{gap:10px}
+  .search{flex-basis:100%}
+  .seg{flex:1 1 auto;justify-content:space-between}
+  .seg button{padding:0 10px;flex:1}
+  .grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+  .card{padding:10px 10px 12px;gap:10px;border-radius:22px;box-shadow:var(--out-sm)}
+  .well{border-radius:16px}
+  .card h3{font-size:14px}
+  .notes{font-size:13px;margin-top:-6px}
+  .card .price{flex-wrap:nowrap;gap:8px}
+  .price .cash b{font-size:16px}
+  .price .card-p span{font-size:13px}
+  .card .wa-long{display:none}
+  .card .wa-short{display:inline}
+  .card{padding:9px 9px 11px}
+  .wa{height:40px;font-size:13px;gap:6px}
+  .wa svg{width:18px;height:18px}
+  .zoom{width:100vw;height:100svh;border-radius:0}
+  .zoom-in{padding:max(12px,env(safe-area-inset-top,0px)) max(12px,env(safe-area-inset-right,0px)) max(16px,env(safe-area-inset-bottom,0px)) max(12px,env(safe-area-inset-left,0px))}
+  .zoom-close{top:max(22px,calc(env(safe-area-inset-top,0px) + 10px));right:max(22px,calc(env(safe-area-inset-right,0px) + 10px))}
+  .zoom-info .wa{width:100%}
+}
+</style>
+
+<header class="wrap">
+  <h1 class="brand"><img src="__LOGO__" width="900" height="351" alt="Griyata Parfums"></h1>
+  <p class="intro">Perfumes árabes originales, sellados de fábrica. Elegí el tuyo y pedilo por WhatsApp. Retiro en Malabrigo o envío dentro de la ciudad.</p>
+  <a class="btn" href="https://www.instagram.com/griyata.parfums/" target="_blank" rel="noopener"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>@griyata.parfums</a>
+</header>
+
+<div class="controls">
+  <div class="wrap">
+    <label class="search" for="q">
+      <span class="sr">Buscar por nombre o nota</span>
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+      <input id="q" type="search" placeholder="Buscá por nombre o nota: vainilla, oud…" autocomplete="off">
+    </label>
+    <div class="seg" id="seg" role="group" aria-label="Línea"></div>
+  </div>
+</div>
+
+<main class="wrap" id="list"></main>
+
+<dialog class="zoom" id="zoom" aria-labelledby="zName">
+  <div class="zoom-in">
+    <div class="zoom-img" id="zImgWrap"><img id="zImg" src="__FIRST_IMG__" alt=""></div>
+    <div class="zoom-info">
+      <div><h2 id="zName"></h2><p id="zNotes"></p><div id="zPrice"></div></div>
+      <a class="wa" id="zWa" href="#" target="_blank" rel="noopener"></a>
+    </div>
+  </div>
+  <button class="zoom-close" id="zClose" type="button" aria-label="Cerrar"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
+</dialog>
+
+<footer class="wrap">
+  <div class="panel">
+    <div>
+      <h2>Pedidos y consultas</h2>
+      <p>Escribinos por WhatsApp y te asesoramos sobre cualquier perfume.</p>
+      <div class="phone"><span class="num" id="phoneNum">+54 3482 66-4743</span><button class="btn" id="copy" type="button">Copiar número</button></div>
+    </div>
+    <div>
+      <h2>Dónde retirar</h2>
+      <p>Troya Tech, Federico Sigel 765, Malabrigo, Santa Fe. También hacemos envíos dentro de Malabrigo.</p>
+    </div>
+    <div>
+      <h2>Seguinos</h2>
+      <p>Novedades y perfumes nuevos en Instagram.</p>
+      <div class="phone"><a class="btn" href="https://www.instagram.com/griyata.parfums/" target="_blank" rel="noopener"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>@griyata.parfums</a></div>
+    </div>
+  </div>
+  <p class="imprint">Griyata Parfums · Precios en pesos argentinos · Actualizado en octubre de 2026</p>
+</footer>
+
+<script>
+const DATA = __DATA__;
+const IMGS = __IMGS__;
+const WA = "543482664743";
+const $ = id => document.getElementById(id);
+const fmt = n => "$ " + Math.round(n).toLocaleString("es-AR");
+const norm = s => s.normalize("NFD").replace(/[̀-ͯ]/g,"").toLowerCase();
+const esc = s => String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const lineName = s => s.charAt(0)+s.slice(1).toLowerCase();
+const SECTIONS = [...new Set(DATA.map(p=>p.s))];
+const WA_ICON = `<svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2Zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.2-.4.2-.4.7-1.3.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.7 11.8 11.8 0 0 0 4.5 4c1.7.7 2.3.8 3.2.6.5-.1 1.5-.6 1.7-1.2.2-.6.2-1.1.2-1.2l-.5-.3Z"/></svg>`;
+let line = "Todos";
+const waHref = p => `https://wa.me/${WA}?text=${encodeURIComponent(`Hola! Quiero consultar por el perfume ${p.n} (${fmt(p.c)} contado / ${fmt(p.t)} con tarjeta).`)}`;
+
+$("seg").innerHTML = ["Todos",...SECTIONS].map(s=>`<button type="button" data-s="${s}" aria-pressed="${s===line}">${s==="Todos"?"Todos":lineName(s)}</button>`).join("");
+$("seg").addEventListener("click", e=>{
+  const b = e.target.closest("button"); if(!b) return;
+  line = b.dataset.s;
+  $("seg").querySelectorAll("button").forEach(x=>x.setAttribute("aria-pressed", x===b));
+  render();
+});
+
+const priceHtml = p => `<div class="price num"><div class="cash"><b>${fmt(p.c)}</b><small>contado</small></div><div class="card-p"><span>${fmt(p.t)}</span><small>tarjeta</small></div></div>`;
+function cardHtml(p){
+  return `<article class="card">
+    <button class="well" type="button" data-i="${p.i}" aria-label="Ver ${esc(p.n)} más grande"><img src="${IMGS[p.i]}" alt="Frasco de ${esc(p.n)}" loading="lazy"></button>
+    <h3>${esc(p.n)}</h3>
+    <p class="notes">${esc((p.notes||"").split("·").map(x=>x.trim()).join(", "))}</p>
+    <div class="foot">
+      ${priceHtml(p)}
+      <a class="wa" href="${waHref(p)}" target="_blank" rel="noopener" aria-label="Pedir ${esc(p.n)} por WhatsApp">${WA_ICON}<span class="wa-long">Pedir por WhatsApp</span><span class="wa-short">Pedir</span></a>
+    </div>
+  </article>`;
+}
+function render(){
+  const raw = $("q").value.trim(), q = norm(raw);
+  let html = "";
+  SECTIONS.forEach(s=>{
+    if(line !== "Todos" && line !== s) return;
+    const items = DATA.filter(p=>p.s===s && (!q || norm(p.n+" "+(p.notes||"")).includes(q)));
+    if(!items.length) return;
+    html += `<section class="group"><h2>${lineName(s)} <span class="num">${items.length}</span></h2><div class="grid">${items.map(cardHtml).join("")}</div></section>`;
+  });
+  $("list").innerHTML = html || `<p class="empty">No encontramos perfumes con “${esc(raw)}”. Probá con otra nota, como vainilla, rosa u oud.</p>`;
+}
+$("q").addEventListener("input", render);
+
+const zoom = $("zoom");
+function openZoom(i){
+  const p = DATA.find(x=>x.i===i);
+  $("zImg").src = IMGS[p.i]; $("zImg").alt = "Frasco de " + p.n;
+  $("zName").textContent = p.n;
+  $("zNotes").textContent = (p.notes||"").split("·").map(x=>x.trim()).join(", ");
+  $("zPrice").innerHTML = priceHtml(p);
+  $("zWa").href = waHref(p); $("zWa").innerHTML = WA_ICON + "Pedir por WhatsApp";
+  zoom.classList.remove("closing");
+  zoom.showModal();
+}
+function closeZoom(){
+  if(!zoom.open) return;
+  if(matchMedia("(prefers-reduced-motion: reduce)").matches){ zoom.close(); return; }
+  zoom.classList.add("closing");
+  setTimeout(()=>{ zoom.close(); zoom.classList.remove("closing"); }, 150);
+}
+$("list").addEventListener("click", e=>{ const w = e.target.closest(".well"); if(w) openZoom(+w.dataset.i); });
+$("zClose").addEventListener("click", closeZoom);
+$("zImgWrap").addEventListener("click", closeZoom);
+zoom.addEventListener("click", e=>{ if(e.target === zoom) closeZoom(); });
+zoom.addEventListener("cancel", e=>{ e.preventDefault(); closeZoom(); });
+$("copy").addEventListener("click", async e=>{
+  const b = e.currentTarget;
+  try{ await navigator.clipboard.writeText("+"+WA); b.textContent = "Copiado"; }
+  catch{ const r = document.createRange(); r.selectNodeContents($("phoneNum")); const s = getSelection(); s.removeAllRanges(); s.addRange(r); b.textContent = "Número seleccionado"; }
+  setTimeout(()=>b.textContent = "Copiar número", 1800);
+});
+render();
+</script>
