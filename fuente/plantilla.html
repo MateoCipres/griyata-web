@@ -42,7 +42,40 @@ header{padding-block:clamp(36px,6vw,72px) 8px;display:grid;justify-items:center;
 /* controls */
 .controls{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);padding-block:18px}
 body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--bg)}
-.controls .wrap{display:flex;flex-wrap:wrap;gap:14px 18px;align-items:center;justify-content:center}
+.controls .bar{display:flex;flex-wrap:wrap;gap:14px 18px;align-items:center;justify-content:center}
+.mini-logo{flex:none;display:block;width:140px;line-height:0;opacity:0;transform:translateY(-6px);pointer-events:none;
+  transition:opacity 200ms var(--ease-out),transform 200ms var(--ease-out)}
+.mini-logo img{width:100%;height:auto;filter:var(--logo-filter)}
+body.scrolled .mini-logo{opacity:1;transform:none;pointer-events:auto}
+body.scrolled .controls{box-shadow:0 10px 18px -14px var(--lo)}
+.filt{position:relative;height:50px;padding:0 20px}
+.filt[aria-expanded="true"]{box-shadow:var(--in-sm)}
+.badge{min-width:22px;height:22px;border-radius:var(--r-pill);background:var(--accent);color:var(--accent-ink);font-size:12px;font-weight:700;display:inline-grid;place-items:center;padding:0 6px}
+.panel-wrap{position:absolute;left:0;right:0;top:100%;padding-top:4px;
+  opacity:0;transform:translateY(-8px);visibility:hidden;pointer-events:none;
+  transition:opacity 150ms ease,transform 150ms ease,visibility 0s linear 150ms}
+.panel-wrap[data-open="true"]{opacity:1;transform:none;visibility:visible;pointer-events:auto;
+  transition:opacity 220ms var(--ease-out),transform 220ms var(--ease-out),visibility 0s}
+.fp{background:var(--bg);border-radius:var(--r-lg);box-shadow:var(--out);padding:22px 24px;display:grid;gap:22px;max-height:calc(100svh - 120px);overflow:auto;overscroll-behavior:contain}
+.fp h2{margin:0 0 12px;font-size:15px;font-weight:600}
+.fp-line{display:none}
+.chips{display:flex;flex-wrap:wrap;gap:10px}
+.chip{border:0;border-radius:var(--r-pill);height:40px;padding:0 16px;background:var(--bg);box-shadow:var(--out-sm);font-size:14px;font-weight:600;color:var(--ink);cursor:pointer;
+  transition:box-shadow 160ms ease,transform 160ms var(--ease-out),color 160ms ease}
+.chip span{color:var(--muted);font-weight:500;margin-left:6px}
+.chip[aria-pressed="true"]{box-shadow:var(--in-sm);color:var(--accent)}
+.chip:active{transform:scale(0.96)}
+.range-head{display:flex;justify-content:space-between;align-items:baseline;gap:12px;margin-bottom:12px}
+.range-head h2{margin:0}
+.range-head output{font-weight:700;font-size:16px}
+.range{-webkit-appearance:none;appearance:none;width:100%;height:14px;border-radius:var(--r-pill);background:var(--bg);box-shadow:var(--in-sm);margin:0;cursor:pointer}
+.range::-webkit-slider-thumb{-webkit-appearance:none;width:30px;height:30px;border-radius:50%;background:var(--accent);box-shadow:3px 3px 8px var(--lo),-2px -2px 6px var(--hi);border:0;transition:transform 160ms var(--ease-out)}
+.range::-moz-range-thumb{width:30px;height:30px;border-radius:50%;background:var(--accent);box-shadow:3px 3px 8px var(--lo),-2px -2px 6px var(--hi);border:0}
+.range:active::-webkit-slider-thumb{transform:scale(1.08)}
+.range-ends{display:flex;justify-content:space-between;color:var(--muted);font-size:13px;margin-top:8px}
+.fp-foot{display:flex;flex-wrap:wrap;align-items:center;gap:12px;justify-content:flex-end}
+.fp-foot .count{margin-right:auto;color:var(--muted);font-size:14px}
+.brand-line{margin:-6px 0 -8px;font-size:13px;font-weight:500;color:var(--accent)}
 .search{flex:1 1 300px;max-width:440px;position:relative}
 .search input{width:100%;height:50px;border:0;border-radius:var(--r-pill);background:var(--bg);box-shadow:var(--in);padding:0 20px 0 50px;font-size:16px;outline-offset:2px}
 .search input::placeholder{color:var(--muted)}
@@ -52,13 +85,14 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
   transition:color 160ms ease,box-shadow 200ms var(--ease-out),transform 160ms var(--ease-out)}
 .seg button[aria-pressed="true"]{color:var(--ink);background:var(--bg);box-shadow:var(--out-sm)}
 .seg button:active{transform:scale(0.96)}
+.seg.wide{display:flex;flex-wrap:wrap}
 
 /* catalogue */
 main{padding-block:12px 64px}
 .group{padding-top:56px}
 .group h2{margin:0 0 22px;font-size:clamp(24px,2.6vw,30px);font-weight:600;display:flex;align-items:baseline;gap:10px}
 .group h2 span{font-size:14px;font-weight:500;color:var(--muted)}
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(200px,100%),1fr));gap:28px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(220px,100%),1fr));gap:28px}
 .card{background:var(--bg);border-radius:var(--r-lg);box-shadow:var(--out);padding:16px 16px 18px;display:flex;flex-direction:column;gap:14px;min-width:0}
 .well{border:0;padding:0;width:100%;cursor:zoom-in;border-radius:var(--r-md);background:var(--well);box-shadow:var(--in);aspect-ratio:1/1;max-width:100%;display:grid;place-items:center;overflow:hidden;
   transition:transform 160ms var(--ease-out)}
@@ -78,6 +112,9 @@ main{padding-block:12px 64px}
 .zoom-info h2{margin:0 0 4px;font-size:clamp(20px,2.4vw,26px);font-weight:600;line-height:1.2}
 .zoom-info p{margin:0 0 10px;color:var(--muted);font-size:14px}
 .zoom-info .wa{padding:0 22px}
+.zoom-info .price .cash b{font-size:24px}
+.zoom-info .price .card-p span{font-size:15px}
+.zoom-info .price{gap:4px 14px}
 .zoom-close{position:absolute;top:26px;right:26px;width:44px;height:44px;border-radius:50%;border:0;background:var(--bg);color:var(--ink);box-shadow:var(--out-sm);display:grid;place-items:center;cursor:pointer;
   transition:box-shadow 160ms ease,transform 160ms var(--ease-out)}
 .zoom-close:active{box-shadow:var(--in-sm);transform:scale(0.95)}
@@ -86,14 +123,15 @@ body:has(.zoom[open]){overflow:hidden}
 .card h3{margin:0;font-size:16px;font-weight:600;line-height:1.3;text-wrap:balance}
 .notes{margin:-8px 0 0;color:var(--muted);font-size:14px;line-height:1.4}
 .foot{margin-top:auto;display:grid;gap:14px}
-.price{display:flex;align-items:flex-end;gap:6px 14px;flex-wrap:wrap;line-height:1.15}
+.card{container-type:inline-size}
+.price{display:flex;align-items:flex-end;gap:4px clamp(6px,4cqi,14px);flex-wrap:wrap;line-height:1.15;white-space:nowrap}
 .price div{display:grid}
-.price .cash b{font-size:22px;font-weight:700;letter-spacing:-0.01em}
-.price .card-p span{font-size:14px;font-weight:500;color:var(--muted)}
+.price .cash b{font-size:clamp(15px,10cqi,22px);font-weight:700;letter-spacing:-0.01em}
+.price .card-p span{font-size:clamp(12px,6.6cqi,14px);font-weight:500;color:var(--muted)}
 .price small{font-size:13px;color:var(--muted);font-weight:500}
 .wa-short{display:none}
 .wa{display:flex;align-items:center;justify-content:center;gap:8px;height:44px;border-radius:var(--r-pill);background:var(--bg);color:var(--accent);box-shadow:var(--out-sm);
-  font-size:14px;font-weight:600;text-decoration:none;transition:box-shadow 160ms ease,transform 160ms var(--ease-out),background-color 160ms ease,color 160ms ease}
+  font-size:14px;font-weight:600;text-decoration:none;white-space:nowrap;transition:box-shadow 160ms ease,transform 160ms var(--ease-out),background-color 160ms ease,color 160ms ease}
 .wa:active{box-shadow:var(--in-sm);transform:scale(0.96)}
 @media (hover:hover) and (pointer:fine){
   .card:hover .well img{transform:scale(1.05)}
@@ -117,19 +155,27 @@ footer{padding-block:24px 56px}
 
 @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important}}
 @media (max-width:560px){
-  .controls{padding-block:12px}
-  .controls .wrap{gap:10px}
-  .search{flex-basis:100%}
+  .controls{padding-block:10px}
+  .controls .bar{gap:10px;justify-content:space-between}
+  .mini-logo{width:96px;order:1}
+  .filt{order:2;height:44px;padding:0 16px}
+  .search{order:3;flex-basis:100%}
+  .search input{height:46px}
+  .bar > .seg{display:none}
+  .fp-line{display:block}
   .seg{flex:1 1 auto;justify-content:space-between}
   .seg button{padding:0 10px;flex:1}
+  .fp{padding:18px 16px;gap:20px;border-radius:22px;max-height:calc(100svh - 130px)}
+  .seg.wide{display:grid;grid-template-columns:1fr 1fr;border-radius:22px;gap:4px}
+  .seg.wide button{border-radius:18px;padding:0 8px}
+  .fp-foot .btn{flex:1;justify-content:center}
+  .fp-foot .count{flex-basis:100%}
+  .brand-line{font-size:12.5px}
   .grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
   .card{padding:10px 10px 12px;gap:10px;border-radius:22px;box-shadow:var(--out-sm)}
   .well{border-radius:16px}
   .card h3{font-size:14px}
   .notes{font-size:13px;margin-top:-6px}
-  .card .price{flex-wrap:nowrap;gap:8px}
-  .price .cash b{font-size:16px}
-  .price .card-p span{font-size:13px}
   .card .wa-long{display:none}
   .card .wa-short{display:inline}
   .card{padding:9px 9px 11px}
@@ -142,20 +188,35 @@ footer{padding-block:24px 56px}
 }
 </style>
 
-<header class="wrap">
+<header class="wrap" id="top">
   <h1 class="brand"><img src="__LOGO__" width="900" height="351" alt="Griyata Parfums"></h1>
   <p class="intro">Perfumes árabes originales, sellados de fábrica. Elegí el tuyo y pedilo por WhatsApp. Retiro en Malabrigo o envío dentro de la ciudad.</p>
   <a class="btn" href="https://www.instagram.com/griyata.parfums/" target="_blank" rel="noopener"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>@griyata.parfums</a>
 </header>
 
-<div class="controls">
-  <div class="wrap">
+<div class="controls" id="controls">
+  <div class="wrap bar">
+    <a class="mini-logo" href="#top" aria-label="Griyata Parfums, volver arriba" tabindex="-1"><img id="miniLogo" width="900" height="351" alt=""></a>
     <label class="search" for="q">
-      <span class="sr">Buscar por nombre o nota</span>
+      <span class="sr">Buscar por nombre, marca o nota</span>
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
-      <input id="q" type="search" placeholder="Buscá por nombre o nota: vainilla, oud…" autocomplete="off">
+      <input id="q" type="search" placeholder="Buscá por nombre, marca o nota…" autocomplete="off">
     </label>
     <div class="seg" id="seg" role="group" aria-label="Línea"></div>
+    <button class="btn filt" id="filtBtn" type="button" aria-expanded="false" aria-controls="filtPanel"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M4 6h16M7 12h10M10 18h4"/></svg>Filtros <span class="badge num" id="filtCount" hidden></span></button>
+  </div>
+  <div class="panel-wrap" id="filtPanel" data-open="false" role="region" aria-label="Filtros">
+    <div class="wrap"><div class="fp">
+      <div class="fp-line"><h2>Línea</h2><div class="seg" id="seg2" role="group" aria-label="Línea"></div></div>
+      <div><h2>Marca</h2><div class="chips" id="brands"></div></div>
+      <div>
+        <div class="range-head"><h2><label for="maxPrice">Precio de contado</label></h2><output id="maxOut" for="maxPrice" class="num"></output></div>
+        <input class="range" id="maxPrice" type="range" step="1000">
+        <div class="range-ends num"><span id="minLbl"></span><span id="maxLbl"></span></div>
+      </div>
+      <div><h2>Ordenar por</h2><div class="seg wide" id="sort" role="group" aria-label="Ordenar por"></div></div>
+      <div class="fp-foot"><span class="count num" id="resCount"></span><button class="btn" id="clear" type="button">Limpiar filtros</button><button class="btn primary" id="done" type="button">Ver perfumes</button></div>
+    </div></div>
   </div>
 </div>
 
@@ -203,21 +264,73 @@ const esc = s => String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&g
 const lineName = s => s.charAt(0)+s.slice(1).toLowerCase();
 const SECTIONS = [...new Set(DATA.map(p=>p.s))];
 const WA_ICON = `<svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2Zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.2-.4.2-.4.7-1.3.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.7 11.8 11.8 0 0 0 4.5 4c1.7.7 2.3.8 3.2.6.5-.1 1.5-.6 1.7-1.2.2-.6.2-1.1.2-1.2l-.5-.3Z"/></svg>`;
-let line = "Todos";
+let line = "Todos", brands = new Set(), sortBy = "rec";
+const PMIN = Math.floor(Math.min(...DATA.map(p=>p.c))/1000)*1000, PMAX = Math.ceil(Math.max(...DATA.map(p=>p.c))/1000)*1000;
+let maxPrice = PMAX;
 const waHref = p => `https://wa.me/${WA}?text=${encodeURIComponent(`Hola! Quiero consultar por el perfume ${p.n} (${fmt(p.c)} contado / ${fmt(p.t)} con tarjeta).`)}`;
 
-$("seg").innerHTML = ["Todos",...SECTIONS].map(s=>`<button type="button" data-s="${s}" aria-pressed="${s===line}">${s==="Todos"?"Todos":lineName(s)}</button>`).join("");
-$("seg").addEventListener("click", e=>{
-  const b = e.target.closest("button"); if(!b) return;
-  line = b.dataset.s;
-  $("seg").querySelectorAll("button").forEach(x=>x.setAttribute("aria-pressed", x===b));
-  render();
+// línea: the same control lives in the bar (desktop) and in the panel (phone)
+["seg","seg2"].forEach(id=>{
+  $(id).innerHTML = ["Todos",...SECTIONS].map(s=>`<button type="button" data-s="${s}" aria-pressed="${s===line}">${s==="Todos"?"Todos":lineName(s)}</button>`).join("");
+  $(id).addEventListener("click", e=>{
+    const b = e.target.closest("button"); if(!b) return;
+    line = b.dataset.s; syncLine(); render();
+  });
 });
+const syncLine = () => document.querySelectorAll("#seg button,#seg2 button").forEach(x=>x.setAttribute("aria-pressed", x.dataset.s===line));
+
+// marca
+const BRANDS = [...new Set(DATA.map(p=>p.b).filter(Boolean))].sort((a,b)=>DATA.filter(p=>p.b===b).length - DATA.filter(p=>p.b===a).length || a.localeCompare(b));
+$("brands").innerHTML = BRANDS.map(b=>`<button class="chip" type="button" data-b="${esc(b)}" aria-pressed="false">${esc(b)}<span class="num">${DATA.filter(p=>p.b===b).length}</span></button>`).join("");
+$("brands").addEventListener("click", e=>{
+  const c = e.target.closest(".chip"); if(!c) return;
+  const b = c.dataset.b; brands.has(b) ? brands.delete(b) : brands.add(b);
+  c.setAttribute("aria-pressed", brands.has(b)); render();
+});
+
+// precio
+const range = $("maxPrice");
+range.min = PMIN; range.max = PMAX; range.value = PMAX;
+$("minLbl").textContent = fmt(PMIN); $("maxLbl").textContent = fmt(PMAX);
+const showMax = () => $("maxOut").textContent = maxPrice >= PMAX ? "Todos los precios" : "Hasta " + fmt(maxPrice);
+range.addEventListener("input", ()=>{ maxPrice = +range.value; showMax(); render(); });
+showMax();
+
+// orden
+const SORTS = [["rec","Recomendado"],["asc","Menor precio"],["desc","Mayor precio"],["az","Nombre A–Z"]];
+$("sort").innerHTML = SORTS.map(([k,l])=>`<button type="button" data-k="${k}" aria-pressed="${k===sortBy}">${l}</button>`).join("");
+$("sort").addEventListener("click", e=>{
+  const b = e.target.closest("button"); if(!b) return;
+  sortBy = b.dataset.k; $("sort").querySelectorAll("button").forEach(x=>x.setAttribute("aria-pressed", x===b)); render();
+});
+
+// panel
+const panel = $("filtPanel"), fbtn = $("filtBtn");
+function setPanel(open){
+  panel.dataset.open = open; fbtn.setAttribute("aria-expanded", open);
+  if(open){ const r = $("controls").getBoundingClientRect(); if(r.top > 1) $("controls").scrollIntoView({block:"start"}); }
+}
+fbtn.addEventListener("click", ()=>setPanel(panel.dataset.open !== "true"));
+$("done").addEventListener("click", ()=>{ setPanel(false); $("list").scrollIntoView({block:"start"}); });
+document.addEventListener("pointerdown", e=>{ if(panel.dataset.open==="true" && !e.target.closest("#controls")) setPanel(false); });
+document.addEventListener("keydown", e=>{ if(e.key==="Escape" && panel.dataset.open==="true"){ setPanel(false); fbtn.focus(); } });
+function clearFilters(){
+  brands.clear(); document.querySelectorAll("#brands .chip").forEach(c=>c.setAttribute("aria-pressed","false"));
+  maxPrice = PMAX; range.value = PMAX; showMax();
+  sortBy = "rec"; $("sort").querySelectorAll("button").forEach(x=>x.setAttribute("aria-pressed", x.dataset.k==="rec"));
+  line = "Todos"; syncLine(); $("q").value = ""; render();
+}
+$("clear").addEventListener("click", clearFilters);
+
+// the small logo reuses the big one's image and appears once the big one has scrolled away
+$("miniLogo").src = document.querySelector(".brand img").src;
+new IntersectionObserver(([e])=>document.body.classList.toggle("scrolled", !e.isIntersecting), {rootMargin:"-40px 0px 0px 0px"}).observe(document.querySelector(".brand"));
 
 const priceHtml = p => `<div class="price num"><div class="cash"><b>${fmt(p.c)}</b><small>contado</small></div><div class="card-p"><span>${fmt(p.t)}</span><small>tarjeta</small></div></div>`;
 function cardHtml(p){
   return `<article class="card">
     <button class="well" type="button" data-i="${p.i}" aria-label="Ver ${esc(p.n)} más grande"><img src="${IMGS[p.i]}" alt="Frasco de ${esc(p.n)}" loading="lazy"></button>
+    ${p.b?`<p class="brand-line">${esc(p.b)}</p>`:""}
     <h3>${esc(p.n)}</h3>
     <p class="notes">${esc((p.notes||"").split("·").map(x=>x.trim()).join(", "))}</p>
     <div class="foot">
@@ -226,16 +339,25 @@ function cardHtml(p){
     </div>
   </article>`;
 }
+const SORTERS = {rec:null, asc:(a,b)=>a.c-b.c, desc:(a,b)=>b.c-a.c, az:(a,b)=>a.n.localeCompare(b.n,"es")};
 function render(){
   const raw = $("q").value.trim(), q = norm(raw);
-  let html = "";
+  let html = "", total = 0;
   SECTIONS.forEach(s=>{
     if(line !== "Todos" && line !== s) return;
-    const items = DATA.filter(p=>p.s===s && (!q || norm(p.n+" "+(p.notes||"")).includes(q)));
+    let items = DATA.filter(p=>p.s===s
+      && (!q || norm(p.n+" "+(p.b||"")+" "+(p.notes||"")).includes(q))
+      && (!brands.size || brands.has(p.b))
+      && p.c <= maxPrice);
+    if(SORTERS[sortBy]) items = items.slice().sort(SORTERS[sortBy]);
     if(!items.length) return;
+    total += items.length;
     html += `<section class="group"><h2>${lineName(s)} <span class="num">${items.length}</span></h2><div class="grid">${items.map(cardHtml).join("")}</div></section>`;
   });
-  $("list").innerHTML = html || `<p class="empty">No encontramos perfumes con “${esc(raw)}”. Probá con otra nota, como vainilla, rosa u oud.</p>`;
+  $("list").innerHTML = html || `<div class="empty"><p>No hay perfumes con esos filtros.</p><button class="btn" type="button" onclick="clearFilters()">Limpiar filtros</button></div>`;
+  $("resCount").textContent = total === 1 ? "1 perfume" : total + " perfumes";
+  const active = brands.size + (maxPrice < PMAX ? 1 : 0) + (sortBy !== "rec" ? 1 : 0);
+  $("filtCount").hidden = !active; $("filtCount").textContent = active;
 }
 $("q").addEventListener("input", render);
 
