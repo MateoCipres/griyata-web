@@ -19,9 +19,9 @@ HEAD = """<!doctype html>
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="description" content="Perfumes árabes originales, sellados de fábrica. Catálogo con precios y pedidos por WhatsApp. Retiro en Malabrigo, Santa Fe.">
+<meta name="description" content="Perfumes árabes originales. Catálogo con precios y pedidos por WhatsApp. Retiro en Malabrigo, Santa Fe.">
 <meta property="og:title" content="Griyata Parfums">
-<meta property="og:description" content="Perfumes árabes originales, sellados de fábrica. Catálogo con precios y pedidos por WhatsApp.">
+<meta property="og:description" content="Perfumes árabes originales. Catálogo con precios y pedidos por WhatsApp.">
 <meta property="og:type" content="website">
 <meta name="theme-color" content="#e7e8ee" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#262830" media="(prefers-color-scheme: dark)">
