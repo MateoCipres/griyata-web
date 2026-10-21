@@ -49,25 +49,39 @@ header{padding-block:clamp(16px,3vw,32px) 8px;display:grid;justify-items:center;
 
 /* edición especial */
 .feat{background:var(--wine);margin-top:clamp(28px,4vw,44px);padding-block:clamp(36px,5vw,56px) clamp(32px,4vw,48px)}
-.feat-head{display:flex;align-items:flex-end;justify-content:space-between;gap:20px;margin-bottom:26px}
-.feat h2{margin:0 0 10px;font-family:var(--display);font-weight:600;font-size:clamp(32px,5vw,52px);line-height:1.05;letter-spacing:-0.01em;text-wrap:balance}
-.feat-head p{margin:0;max-width:46ch;color:var(--muted)}
-.feat-nav{display:flex;gap:10px;flex:none}
-.feat-nav button{width:46px;height:46px;border-radius:50%;border:1px solid color-mix(in srgb,var(--cream) 40%,transparent);background:transparent;color:var(--cream);display:grid;place-items:center;cursor:pointer;
-  transition:background-color 160ms ease,color 160ms ease,transform 160ms var(--ease-out)}
-.feat-nav button:active{transform:scale(0.94)}
-.feat-track{display:flex;gap:18px;overflow-x:auto;scroll-snap-type:x mandatory;overscroll-behavior-x:contain;scrollbar-width:none;
+.feat-head{text-align:center;margin-bottom:26px}
+.feat h2{margin:0 auto 10px;font-family:var(--display);font-weight:600;font-size:clamp(32px,5vw,52px);line-height:1.05;letter-spacing:-0.01em;text-wrap:balance}
+.feat-head p{margin:0 auto;max-width:44ch;color:var(--muted);text-wrap:balance}
+/* a native scroll strip (no snapping, so it can glide and be dragged freely); JS moves scrollLeft for the slow drift.
+   It is a grid of columns with 5 shared rows (bottle, brand, name, price, button): each bottle uses subgrid,
+   so every row is as tall as its tallest entry and a two-line name never pushes one price lower than the rest. */
+.feat-track{display:grid;grid-auto-flow:column;grid-auto-columns:clamp(168px,42vw,224px);grid-template-rows:repeat(5,auto);column-gap:18px;row-gap:6px;overflow-x:auto;overscroll-behavior-x:contain;scrollbar-width:none;
   --gutter:max(16px,env(safe-area-inset-left,0px),calc((100vw - 1180px) / 2 + 16px));
-  padding:4px var(--gutter) 8px;scroll-padding-inline:var(--gutter)}
+  padding:4px var(--gutter) 8px}
 .feat-track::-webkit-scrollbar{display:none}
-.fcard{--ink:#52131e;--muted:#7a3c45;flex:0 0 clamp(232px,68vw,276px);scroll-snap-align:start;background:var(--cream);color:var(--ink);border-radius:var(--r-lg);padding:12px 12px 14px;display:flex;flex-direction:column;gap:10px;container-type:inline-size;position:relative}
-.fcard .well{background:#eccfa6;aspect-ratio:5/4}
-.fcard .well img{width:64%;height:86%}
-.ftag{position:absolute;top:22px;left:22px;display:inline-flex;align-items:center;gap:5px;background:var(--wine);color:var(--cream);border-radius:var(--r-pill);padding:4px 10px 4px 8px;font-size:11.5px;font-weight:600;letter-spacing:0.02em;pointer-events:none}
-.fcard .brand-line{color:var(--muted)}
-.fcard h3{margin:0;font-family:var(--display);font-size:21px;font-weight:600;line-height:1.15}
-.fcard .wa{background:var(--wine);color:var(--cream);box-shadow:none}
-.fcard .wa:active{transform:scale(0.97)}
+/* bottles fade into the wine at both edges instead of being sliced; fixed overlays, so scrolling stays cheap */
+.feat-strip{position:relative}
+.feat-strip::before,.feat-strip::after{content:"";position:absolute;top:0;bottom:0;width:clamp(20px,5vw,64px);z-index:1;pointer-events:none}
+.feat-strip::before{left:0;background:linear-gradient(90deg,var(--wine),transparent)}
+.feat-strip::after{right:0;background:linear-gradient(270deg,var(--wine),transparent)}
+/* each bottle stands free on the wine, with only a soft floor shadow under it */
+/* no container-type here: it adds layout containment, which switches subgrid off */
+.fitem{grid-row:span 5;display:grid;grid-template-rows:subgrid;justify-items:center;text-align:center}
+.fitem .price b{font-size:clamp(17px,4.6vw,22px)}
+.fitem .well{background:transparent;aspect-ratio:4/5;border-radius:0;overflow:visible;position:relative;isolation:isolate}
+.fitem .well::after{content:"";position:absolute;left:20%;right:20%;bottom:3%;height:7%;border-radius:50%;background:radial-gradient(closest-side,rgb(0 0 0 / 0.5),transparent);z-index:-1}
+.fitem .well img{width:80%;height:90%}
+.fitem .brand-line{margin:6px 0 0}
+.fitem h3{margin:0;font-family:var(--display);font-size:20px;font-weight:600;line-height:1.15;text-wrap:balance}
+.fitem .well{width:100%}
+.fprice{display:grid;justify-items:center;gap:2px}
+.fitem .price{justify-content:center}
+.fitem .cuotas{margin:0}
+.fbuy{display:inline-flex;align-items:center;gap:7px;min-height:40px;padding:0 6px;color:var(--cream);font-size:14px;font-weight:600;letter-spacing:0.02em;text-decoration:none;transition:transform 160ms var(--ease-out)}
+.fbuy svg{width:18px;height:18px}
+.fbuy span{position:relative}
+.fbuy span::after{content:"";position:absolute;left:0;right:0;bottom:-3px;height:1px;background:currentColor;transform:scaleX(0);transform-origin:left;transition:transform 300ms var(--ease-out)}
+.fbuy:active{transform:scale(0.96)}
 
 /* controls */
 .controls{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);padding-block:18px}
@@ -111,8 +125,13 @@ body.scrolled .controls{box-shadow:0 1px 0 var(--line)}
 .search input:focus{box-shadow:inset 0 0 0 1px var(--muted)}
 .search input::placeholder{color:var(--muted)}
 .search svg{position:absolute;left:20px;top:50%;transform:translateY(-50%);color:var(--muted)}
-.seg{display:flex;padding:5px;border-radius:var(--r-pill);background:var(--surface);box-shadow:var(--in-sm)}
-.seg button{border:0;background:transparent;border-radius:var(--r-pill);padding:0 16px;height:40px;font-size:14px;font-weight:600;color:var(--muted);cursor:pointer;
+.seg{display:flex;padding:5px;border-radius:var(--r-pill);background:var(--surface);box-shadow:var(--in-sm);position:relative}
+/* sliding highlight behind the chosen option; it moves by left/top/width/height so the rounded ends never stretch */
+.seg-ind{position:absolute;left:0;top:0;width:0;height:0;border-radius:var(--r-pill);background:var(--cream);pointer-events:none;
+  transition:left 300ms var(--ease-out),top 300ms var(--ease-out),width 300ms var(--ease-out),height 300ms var(--ease-out)}
+.seg-ind.instant{transition:none}
+.seg.has-ind button[aria-pressed="true"]{background:transparent}
+.seg button{position:relative;z-index:1;border:0;background:transparent;border-radius:var(--r-pill);padding:0 16px;height:40px;font-size:14px;font-weight:600;color:var(--muted);cursor:pointer;
   transition:color 160ms ease,background-color 200ms var(--ease-out),transform 160ms var(--ease-out)}
 .seg button[aria-pressed="true"]{color:var(--wine);background:var(--cream)}
 .seg button:active{transform:scale(0.96)}
@@ -145,7 +164,7 @@ main{padding-block:12px 64px}
 .zoom-info h2{margin:0 0 4px;font-family:var(--display);font-size:clamp(24px,3vw,32px);font-weight:600;line-height:1.15}
 .zoom-info p{margin:0 0 12px;color:var(--muted);font-size:14px}
 .zoom-info .wa{padding:0 22px}
-.zoom-info .cuotas{display:inline-grid;margin-top:8px}
+.zoom-info .cuotas{margin:4px 0 0}
 .zoom-close{position:absolute;top:26px;right:26px;width:44px;height:44px;border-radius:50%;border:0;background:var(--bg);color:var(--ink);box-shadow:var(--out-sm);display:grid;place-items:center;cursor:pointer;
   transition:background-color 160ms ease,transform 160ms var(--ease-out)}
 .zoom-close:active{transform:scale(0.95)}
@@ -158,24 +177,20 @@ body:has(.zoom[open]){overflow:hidden}
 .price{display:flex;align-items:baseline;gap:6px;flex-wrap:wrap;line-height:1.15;white-space:nowrap}
 .price b{font-size:clamp(18px,10cqi,23px);font-weight:700;letter-spacing:-0.01em}
 .price small{font-size:13px;color:var(--muted);font-weight:500}
-.cuotas{margin:0;display:grid;gap:1px;background:var(--wine);color:var(--cream);border-radius:10px;padding:8px 12px 9px;line-height:1.25}
-.cuotas span{font-size:12px;font-weight:600;letter-spacing:0.02em}
-.cuotas b{font-size:clamp(15px,8.4cqi,18px);font-weight:700}
+.cuotas{margin:-6px 0 0;color:var(--muted);font-size:13.5px;line-height:1.35}
+.cuotas span{white-space:nowrap}
 .wa-short{display:none}
 .wa{display:flex;align-items:center;justify-content:center;gap:8px;height:44px;border-radius:var(--r-pill);background:transparent;color:var(--ink);box-shadow:inset 0 0 0 1px var(--line-hi);
   font-size:14px;font-weight:600;text-decoration:none;white-space:nowrap;transition:box-shadow 160ms ease,transform 160ms var(--ease-out),background-color 160ms ease,color 160ms ease}
 .wa:active{transform:scale(0.96)}
 @media (hover:hover) and (pointer:fine){
-  .card:hover .well img,.fcard:hover .well img{transform:scale(1.05)}
+  .card:hover .well img,.fitem:hover .well img{transform:scale(1.05)}
   .wa:hover{color:var(--wine);background:var(--cream);box-shadow:none}
-  .fcard .wa:hover{background:var(--bg);color:var(--cream)}
   .seg button:hover{color:var(--ink)}
   .seg button[aria-pressed="true"]:hover{color:var(--wine)}
   .chip:hover{box-shadow:inset 0 0 0 1px var(--muted)}
   .btn:hover{box-shadow:inset 0 0 0 1px var(--muted)}
   .btn.primary:hover{background:#fbe8cb}
-  .feat-nav button:hover{background:var(--cream);color:var(--wine)}
-  .topbar a:hover{text-decoration:underline}
 }
 .empty{text-align:center;color:var(--muted);padding:56px 0 0;max-width:40ch;margin:0 auto}
 
@@ -206,14 +221,66 @@ footer{padding-block:24px 56px}
 .btn.primary{background:var(--cream);color:var(--wine);box-shadow:none}
 .imprint{text-align:center;color:var(--muted);font-size:13px;margin:28px 0 0}
 
-@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important}}
+/* motion: one easing, 200–600 ms, only transform and opacity.
+   Scroll reveals only hide things once the script has added .js-anim to <html>,
+   so if JS fails or motion is reduced everything is simply visible. */
+@keyframes drop-in{from{transform:translateY(-100%)}}
+@keyframes settle{from{transform:scale(1.03)}}
+@keyframes rise{from{opacity:0;transform:translateY(12px)}}
+@keyframes fade{from{opacity:0}}
+@keyframes pop{from{opacity:0;transform:scale(0.6)}}
+@keyframes pop-out{to{opacity:0;transform:scale(0.6)}}
+
+/* page load: strip slides down, banner settles from 103 % (no fade, so it shows at once), intro rises */
+.topbar{animation:drop-in 400ms var(--ease-out) both}
+.brand img{animation:settle 600ms var(--ease-out) both}
+.intro{animation:rise 500ms var(--ease-out) 150ms both}
+
+/* scroll reveals: sections, carousel bottles and footer blocks (--d is a per-element delay) */
+.js-anim [data-reveal]{opacity:0;transform:translateY(16px)}
+.js-anim [data-reveal].in{opacity:1;transform:none;transition:opacity 500ms var(--ease-out) var(--d,0ms),transform 500ms var(--ease-out) var(--d,0ms)}
+
+/* catalogue cards: rise in as they enter the screen; while typing or dragging the price, the list just fades */
+.js-anim .card{opacity:0;transform:translateY(14px)}
+.js-anim .card.in{opacity:1;transform:none;transition:opacity 400ms var(--ease-out) var(--d,0ms),transform 400ms var(--ease-out) var(--d,0ms)}
+.js-anim .card.now{transition:none}
+#list.swap{animation:fade 200ms ease-out}
+.empty{animation:rise 300ms var(--ease-out) both}
+.card{position:relative;isolation:isolate}
+.card::after{content:"";position:absolute;inset:0;z-index:-1;border-radius:inherit;box-shadow:0 22px 40px -18px rgb(0 0 0 / 0.9);opacity:0;pointer-events:none;transition:opacity 300ms var(--ease-out)}
+
+/* filter panel: its blocks follow the panel in, 40 ms apart */
+.fp > *{opacity:0;transform:translateY(6px);transition:opacity 150ms ease,transform 150ms ease}
+.panel-wrap[data-open="true"] .fp > *{opacity:1;transform:none;transition:opacity 300ms var(--ease-out) calc(var(--k,0) * 40ms + 60ms),transform 300ms var(--ease-out) calc(var(--k,0) * 40ms + 60ms)}
+.fp > :nth-child(2){--k:1} .fp > :nth-child(3){--k:2} .fp > :nth-child(4){--k:3} .fp > :nth-child(5){--k:4}
+.badge{animation:pop 200ms var(--ease-out)}
+.badge.out{animation:pop-out 160ms ease-in forwards}
+
+/* copy button: the label cross-fades and a tick pops in */
+.copy .tick{display:none}
+.copy.done .tick{display:block;animation:pop 250ms var(--ease-out)}
+#copyTx{transition:opacity 120ms ease}
+.copy.swap #copyTx{opacity:0}
+
+/* WhatsApp / Instagram / Comprar: small icon gestures, underline that draws in on the contact strip */
+.wa svg,.btn svg,.topbar svg,.fbuy svg{transition:transform 200ms var(--ease-out)}
+.topbar a span{position:relative}
+.topbar a span::after{content:"";position:absolute;left:0;right:0;bottom:-3px;height:1px;background:currentColor;transform:scaleX(0);transform-origin:left;transition:transform 300ms var(--ease-out)}
+@media (hover:hover) and (pointer:fine){
+  .js-anim .card.in:hover{transform:translateY(-4px)}
+  .card:hover::after{opacity:1}
+  .wa:hover svg,.topbar a:hover svg,a.btn[href*="instagram"]:hover svg{transform:rotate(-8deg) scale(1.08)}
+  .topbar a:hover span::after,.fbuy:hover span::after{transform:scaleX(1)}
+  .fbuy:hover svg{transform:rotate(-8deg) scale(1.08)}
+}
+
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important;animation:none!important}}
 @media (max-width:560px){
   .topbar-note{display:none}
   .topbar-in{justify-content:center}
   .topbar-links{justify-content:center;gap:4px 18px}
-  .feat-head{display:block;margin-bottom:20px}
-  .feat-nav{display:none}
-  .feat-track{gap:12px}
+  .feat-head{margin-bottom:20px}
+  .feat-track{column-gap:12px}
   .controls{padding-block:10px}
   .controls .bar{gap:10px;justify-content:space-between}
   .mini-logo{width:96px;order:1}
@@ -226,7 +293,8 @@ footer{padding-block:24px 56px}
   .seg button{padding:0 10px;flex:1}
   .fp{padding:18px 16px;gap:20px;max-height:calc(100svh - 130px)}
   .seg.wide{display:grid;grid-template-columns:1fr 1fr;border-radius:20px;gap:4px}
-  .seg.wide button{border-radius:16px;padding:0 8px}
+  .seg.wide button,.seg.wide .seg-ind{border-radius:16px}
+  .seg.wide button{padding:0 8px}
   .fp-foot .btn{flex:1;justify-content:center}
   .fp-foot .count{flex-basis:100%}
   .brand-line{font-size:11px}
@@ -237,8 +305,7 @@ footer{padding-block:24px 56px}
   .notes{font-size:12.5px;margin-top:-6px;-webkit-line-clamp:1}
   .card .wa-long{display:none}
   .card .wa-short{display:inline}
-  .cuotas{padding:7px 9px 8px}
-  .cuotas span{font-size:11px}
+  .cuotas{font-size:12.5px}
   .wa{height:40px;font-size:13px;gap:6px}
   .wa svg{width:18px;height:18px}
   .zoom{width:100vw;height:100svh;border-radius:0}
@@ -252,13 +319,20 @@ footer{padding-block:24px 56px}
   .where-info .btn{justify-self:stretch;justify-content:center}
 }
 </style>
+<script>
+// before anything paints: opt into scroll reveals unless motion is reduced; undo it if the main script never finishes
+if(!matchMedia("(prefers-reduced-motion: reduce)").matches){
+  document.documentElement.classList.add("js-anim");
+  setTimeout(function(){ if(!window.griyataReady) document.documentElement.classList.remove("js-anim"); }, 3000);
+}
+</script>
 
 <div class="topbar">
   <div class="wrap topbar-in">
     <span class="topbar-note">Pedidos y consultas</span>
     <nav class="topbar-links" aria-label="Contacto">
       <a href="https://wa.me/543482664743" target="_blank" rel="noopener"><svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2Zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.2-.4.2-.4.7-1.3.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.7 11.8 11.8 0 0 0 4.5 4c1.7.7 2.3.8 3.2.6.5-.1 1.5-.6 1.7-1.2.2-.6.2-1.1.2-1.2l-.5-.3Z"/></svg><span class="num">3482 66-4743</span></a>
-      <a href="https://www.instagram.com/griyata.parfums/" target="_blank" rel="noopener"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>@griyata.parfums</a>
+      <a href="https://www.instagram.com/griyata.parfums/" target="_blank" rel="noopener"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg><span>@griyata.parfums</span></a>
     </nav>
   </div>
 </div>
@@ -272,17 +346,11 @@ footer{padding-block:24px 56px}
 </header>
 
 <section class="feat" id="especial" aria-labelledby="feat-title">
-  <div class="wrap feat-head">
-    <div>
-      <h2 id="feat-title">Aromas que te definen</h2>
-      <p>Nuestra edición especial: perfumes con carácter, para los que quieren dejar huella donde pasan.</p>
-    </div>
-    <div class="feat-nav">
-      <button type="button" id="featPrev" aria-label="Perfume anterior"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 6-6 6 6 6"/></svg></button>
-      <button type="button" id="featNext" aria-label="Perfume siguiente"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button>
-    </div>
+  <div class="wrap feat-head" data-reveal>
+    <h2 id="feat-title">Aromas que te definen</h2>
+    <p>Nuestra edición especial: perfumes con carácter, para los que quieren dejar huella donde pasan.</p>
   </div>
-  <div class="feat-track" id="featTrack" role="region" aria-roledescription="carrusel" aria-label="Edición especial" tabindex="0"></div>
+  <div class="feat-strip"><div class="feat-track" id="featTrack" role="region" aria-roledescription="carrusel" aria-label="Edición especial" tabindex="0"></div></div>
 </section>
 
 <div class="controls" id="controls">
@@ -325,8 +393,8 @@ footer{padding-block:24px 56px}
 </dialog>
 
 <section class="where wrap" id="ubicacion" aria-labelledby="where-title">
-  <h2 id="where-title">Dónde estamos</h2>
-  <div class="where-box">
+  <h2 id="where-title" data-reveal>Dónde estamos</h2>
+  <div class="where-box" data-reveal style="--d:100ms">
     <div class="map"><iframe src="https://maps.google.com/maps?q=-29.3449669,-59.9667183&amp;z=16&amp;hl=es&amp;output=embed" title="Mapa: Troya Tech, Federico Sigel 765, Malabrigo" loading="lazy" referrerpolicy="no-referrer-when-downgrade" allowfullscreen></iframe></div>
     <div class="where-info">
       <div class="addr"><svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a7 7 0 0 0-7 7c0 5.2 7 13 7 13s7-7.8 7-13a7 7 0 0 0-7-7Zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5Z"/></svg><div><b>Troya Tech</b><span>Federico Sigel 765, Malabrigo, Santa Fe</span></div></div>
@@ -345,12 +413,12 @@ footer{padding-block:24px 56px}
 
 <footer class="wrap">
   <div class="panel">
-    <div>
+    <div data-reveal>
       <h2>Pedidos y consultas</h2>
       <p>Escribinos por WhatsApp y te asesoramos sobre cualquier perfume.</p>
-      <div class="phone"><span class="num" id="phoneNum">+54 3482 66-4743</span><button class="btn" id="copy" type="button">Copiar número</button></div>
+      <div class="phone"><span class="num" id="phoneNum">+54 3482 66-4743</span><button class="btn copy" id="copy" type="button"><svg class="tick" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg><span id="copyTx">Copiar número</span></button></div>
     </div>
-    <div>
+    <div data-reveal style="--d:100ms">
       <h2>Seguinos</h2>
       <p>Novedades y perfumes nuevos en Instagram.</p>
       <div class="phone"><a class="btn" href="https://www.instagram.com/griyata.parfums/" target="_blank" rel="noopener"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>@griyata.parfums</a></div>
@@ -370,7 +438,7 @@ const esc = s => String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&g
 const lineName = s => s.charAt(0)+s.slice(1).toLowerCase();
 const SECTIONS = [...new Set(DATA.map(p=>p.s))];
 const WA_ICON = `<svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2Zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.2-.4.2-.4.7-1.3.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.7 11.8 11.8 0 0 0 4.5 4c1.7.7 2.3.8 3.2.6.5-.1 1.5-.6 1.7-1.2.2-.6.2-1.1.2-1.2l-.5-.3Z"/></svg>`;
-const STAR = `<svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="m12 2.5 2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 17.4l-5.9 3.1 1.2-6.5-4.8-4.6 6.6-.9z"/></svg>`;
+const calm = !document.documentElement.classList.contains("js-anim"); // reduced motion: no reveals, no pops
 let line = "Todos", brands = new Set(), sortBy = "rec";
 const PMIN = Math.floor(Math.min(...DATA.map(p=>p.c))/1000)*1000, PMAX = Math.ceil(Math.max(...DATA.map(p=>p.c))/1000)*1000;
 let maxPrice = PMAX;
@@ -434,7 +502,7 @@ $("clear").addEventListener("click", clearFilters);
 new IntersectionObserver(([e])=>document.body.classList.toggle("scrolled", !e.isIntersecting), {rootMargin:"-40px 0px 0px 0px"}).observe(document.querySelector(".brand"));
 
 // one price on the card: cash, plus the card plan as 3 equal instalments
-const priceHtml = p => `<div class="price num"><b>${fmt(p.c)}</b><small>contado</small></div>${p.t ? `<p class="cuotas num"><span>3 cuotas sin interés</span><b>de ${cuota(p)}</b></p>` : ""}`;
+const priceHtml = p => `<div class="price num"><b>${fmt(p.c)}</b><small>contado</small></div>${p.t ? `<p class="cuotas num">3 cuotas sin interés de <span>${cuota(p)}</span></p>` : ""}`;
 const wellHtml = p => IMGS[p.i]
   ? `<button class="well" type="button" data-i="${p.i}" aria-label="Ver ${esc(p.n)} más grande"><img src="${IMGS[p.i]}" alt="Frasco de ${esc(p.n)}" loading="lazy"></button>`
   : `<div class="well no-photo">Foto próximamente</div>`;
@@ -451,38 +519,119 @@ function cardHtml(p){
   </article>`;
 }
 
-// edición especial: the most premium bottles that have a photo
+// edición especial: the most premium bottles that have a photo.
+// The set is rendered three times (copy 0 | copy 1 | copy 2) and the strip starts on copy 1, so there is
+// always room to drift or drag either way; jumping exactly one set width shows an identical view.
+// Copies 0 and 2 are hidden from screen readers and the tab order, but stay clickable for touch and mouse.
 const FEAT = DATA.filter(p=>IMGS[p.i]).sort((a,b)=>b.c-a.c).slice(0,8);
 const track = $("featTrack");
-track.innerHTML = FEAT.map(p=>`<article class="fcard">
-    ${wellHtml(p)}
-    <span class="ftag">${STAR}Edición especial</span>
-    ${p.b?`<p class="brand-line">${esc(p.b)}</p>`:""}
+const featHtml = (p, k, copy) => {
+  const main = copy === 1, skip = main ? "" : ' tabindex="-1"';
+  // only the first bottles of the main copy rise in one after another; everything else is simply visible
+  const reveal = main && k < 6 ? ` data-reveal style="--d:${k*70}ms"` : "";
+  return `<article class="fitem"${reveal}${main ? "" : ' aria-hidden="true"'}>
+    ${wellHtml(p).replace('<button class="well"', `<button class="well"${skip}`)}
+    <p class="brand-line">${esc(p.b||"")}</p>
     <h3>${esc(p.n)}</h3>
-    <div class="foot">
-      ${priceHtml(p)}
-      <a class="wa" href="${waHref(p)}" target="_blank" rel="noopener" aria-label="Pedir ${esc(p.n)} por WhatsApp">${WA_ICON}Lo quiero</a>
-    </div>
-  </article>`).join("");
-if(!FEAT.length) $("especial").hidden = true;
-const step = () => (track.querySelector(".fcard")?.offsetWidth || 260) + (parseFloat(getComputedStyle(track).columnGap) || 18);
-const atEnd = () => track.scrollLeft + track.clientWidth >= track.scrollWidth - 4;
-const slide = dir => {
-  if(dir > 0 && atEnd()) track.scrollTo({left:0, behavior:"smooth"});
-  else if(dir < 0 && track.scrollLeft < 4) track.scrollTo({left:track.scrollWidth, behavior:"smooth"});
-  else track.scrollBy({left:dir*step(), behavior:"smooth"});
+    <div class="fprice">${priceHtml(p)}</div>
+    <a class="fbuy" href="${waHref(p)}" target="_blank" rel="noopener" aria-label="Comprar ${esc(p.n)} por WhatsApp"${skip}>${WA_ICON}<span>Comprar</span></a>
+  </article>`;
 };
-$("featPrev").addEventListener("click", ()=>slide(-1));
-$("featNext").addEventListener("click", ()=>slide(1));
-track.addEventListener("keydown", e=>{ if(e.key==="ArrowRight"){ e.preventDefault(); slide(1); } if(e.key==="ArrowLeft"){ e.preventDefault(); slide(-1); } });
-// gentle auto-advance; stops while the visitor is touching, hovering, focused inside, or the carousel is off-screen
-let held = false, seen = false;
-["pointerenter","focusin","touchstart"].forEach(t=>track.addEventListener(t, ()=>held = true, {passive:true}));
-["pointerleave","focusout"].forEach(t=>track.addEventListener(t, ()=>held = false));
-track.addEventListener("touchend", ()=>setTimeout(()=>held = false, 6000), {passive:true});
-new IntersectionObserver(([e])=>seen = e.isIntersecting, {threshold:0.5}).observe(track);
-if(!matchMedia("(prefers-reduced-motion: reduce)").matches)
-  setInterval(()=>{ if(seen && !held && !document.hidden && !zoom.open) slide(1); }, 4500);
+track.innerHTML = [0,1,2].map(copy=>FEAT.map((p,k)=>featHtml(p,k,copy)).join("")).join("");
+if(!FEAT.length) $("especial").hidden = true;
+const setW = () => FEAT.length ? track.children[FEAT.length].offsetLeft - track.children[0].offsetLeft : 0;
+
+// slow drift: requestAnimationFrame nudges scrollLeft forward. Any movement we did not make (finger, momentum,
+// trackpad, keyboard) pauses it, and it picks up again RESUME ms after the strip has gone still.
+const SPEED = 32, RESUME = 2500;          // px per second, pause after the visitor lets go
+let pos = 0, lastSet = 0, last = 0, resumeAt = 0, touching = false, hovering = false, focused = false, featSeen = false, raf = 0;
+requestAnimationFrame(()=>{ pos = lastSet = track.scrollLeft = setW(); });   // start on the main copy
+function drift(t){
+  raf = requestAnimationFrame(drift);
+  const dt = Math.min(t - (last || t), 50) / 1000; last = t;
+  const sl = track.scrollLeft;
+  if(Math.abs(sl - lastSet) > 1){ pos = lastSet = sl; resumeAt = t + RESUME; return; }   // the visitor moved it
+  if(touching || hovering || focused || t < resumeAt || document.hidden || zoom.open) return;
+  const w = setW(); if(!w) return;
+  if(pos < w || pos >= 2*w) pos = w + (((pos - w) % w) + w) % w;   // fold back into the main copy: same picture, no visible jump
+  pos += SPEED * dt;
+  track.scrollLeft = pos; lastSet = track.scrollLeft;   // the browser may round; pos keeps the fraction
+}
+if(FEAT.length > 1 && !matchMedia("(prefers-reduced-motion: reduce)").matches){
+  track.addEventListener("touchstart", ()=>touching = true, {passive:true});
+  ["touchend","touchcancel"].forEach(t=>track.addEventListener(t, ()=>{ touching = false; resumeAt = performance.now() + RESUME; }, {passive:true}));
+  track.addEventListener("pointerenter", e=>{ if(e.pointerType === "mouse") hovering = true; });
+  track.addEventListener("pointerleave", ()=>hovering = false);
+  track.addEventListener("focusin", ()=>focused = true);
+  track.addEventListener("focusout", ()=>focused = false);
+  // only run while the strip is on screen
+  new IntersectionObserver(([e])=>{
+    featSeen = e.isIntersecting; cancelAnimationFrame(raf); last = 0;
+    if(featSeen) raf = requestAnimationFrame(drift);
+  }).observe(track);
+}
+
+// sliding highlight for Línea (bar and panel) and Ordenar por. It follows aria-pressed, so the existing
+// filter code keeps setting the pressed button exactly as before and the highlight just catches up.
+function placeInd(seg, instant){
+  const on = seg.querySelector('button[aria-pressed="true"]'), ind = seg.querySelector(".seg-ind");
+  if(!on || !on.offsetWidth) return;   // hidden (e.g. the panel copy on desktop)
+  ind.classList.toggle("instant", !!instant);
+  Object.assign(ind.style, {left:on.offsetLeft+"px", top:on.offsetTop+"px", width:on.offsetWidth+"px", height:on.offsetHeight+"px"});
+}
+["seg","seg2","sort"].forEach(id=>{
+  const seg = $(id), ind = document.createElement("span");
+  ind.className = "seg-ind"; ind.setAttribute("aria-hidden","true");
+  seg.prepend(ind); seg.classList.add("has-ind");
+  new MutationObserver(()=>placeInd(seg)).observe(seg, {subtree:true, attributeFilter:["aria-pressed"]});
+  const ro = new ResizeObserver(()=>placeInd(seg, true));   // first layout, web-font swap, rotation: no animation
+  ro.observe(seg); seg.querySelectorAll("button").forEach(b=>ro.observe(b));
+});
+
+// scroll reveals for the fixed sections: each element animates once, then stops being watched
+const revealIO = calm ? null : new IntersectionObserver(es=>es.forEach(e=>{
+  if(!e.isIntersecting) return;
+  e.target.classList.add("in"); revealIO.unobserve(e.target);
+}), {threshold:0.15, rootMargin:"0px 0px -5% 0px"});
+if(revealIO) document.querySelectorAll("[data-reveal]").forEach(el=>revealIO.observe(el));
+
+// catalogue cards: render() rebuilds the list, so this runs after every render.
+// disconnect() drops every old card before the new ones are observed, so nothing piles up.
+const cardIO = calm ? null : new IntersectionObserver(es=>{
+  es.filter(e=>e.isIntersecting).forEach((e,k)=>{
+    const c = e.target;
+    c.style.setProperty("--d", Math.min(k,7)*50 + "ms"); // cards that arrive together are staggered, capped at 350 ms
+    c.classList.add("in"); cardIO.unobserve(c);
+    setTimeout(()=>c.style.removeProperty("--d"), 800);  // so the hover lift has no delay afterwards
+  });
+}, {rootMargin:"0px 0px -5% 0px"});
+function animateCards(){
+  if(calm) return;
+  cardIO.disconnect();
+  const list = $("list"), cards = list.querySelectorAll(".card");
+  if([$("q"), range].includes(document.activeElement)){
+    // typing or dragging the price re-renders on every change: show cards at once and just fade the list
+    cards.forEach(c=>c.classList.add("in","now"));
+    setTimeout(()=>cards.forEach(c=>c.classList.remove("now")), 50);
+    list.classList.remove("swap"); void list.offsetWidth; list.classList.add("swap");
+    return;
+  }
+  cards.forEach(c=>cardIO.observe(c));
+}
+
+// filter count badge: pops when the number changes, shrinks away when filters are cleared
+let badgeN = 0;
+function setBadge(n){
+  const el = $("filtCount");
+  if(n){
+    el.textContent = n; el.hidden = false; el.classList.remove("out");
+    if(n !== badgeN && !calm){ el.style.animation = "none"; void el.offsetWidth; el.style.animation = ""; }
+  } else if(badgeN && !calm){
+    el.classList.add("out");
+    setTimeout(()=>{ if(el.classList.contains("out")) el.hidden = true; }, 170); // right after the 160 ms shrink
+  } else el.hidden = true;
+  badgeN = n;
+}
 
 const SORTERS = {rec:null, asc:(a,b)=>a.c-b.c, desc:(a,b)=>b.c-a.c, az:(a,b)=>a.n.localeCompare(b.n,"es")};
 function render(){
@@ -502,7 +651,8 @@ function render(){
   $("list").innerHTML = html || `<div class="empty"><p>No hay perfumes con esos filtros.</p><button class="btn" type="button" onclick="clearFilters()">Limpiar filtros</button></div>`;
   $("resCount").textContent = total === 1 ? "1 perfume" : total + " perfumes";
   const active = brands.size + (maxPrice < PMAX ? 1 : 0) + (sortBy !== "rec" ? 1 : 0);
-  $("filtCount").hidden = !active; $("filtCount").textContent = active;
+  setBadge(active);
+  animateCards();
 }
 $("q").addEventListener("input", render);
 
@@ -530,9 +680,15 @@ zoom.addEventListener("click", e=>{ if(e.target === zoom) closeZoom(); });
 zoom.addEventListener("cancel", e=>{ e.preventDefault(); closeZoom(); });
 $("copy").addEventListener("click", async e=>{
   const b = e.currentTarget;
-  try{ await navigator.clipboard.writeText("+"+WA); b.textContent = "Copiado"; }
-  catch{ const r = document.createRange(); r.selectNodeContents($("phoneNum")); const s = getSelection(); s.removeAllRanges(); s.addRange(r); b.textContent = "Número seleccionado"; }
-  setTimeout(()=>b.textContent = "Copiar número", 1800);
+  // fade the label out, swap it, fade back in; the tick shows only while it says "Copiado"
+  const say = (text, done) => {
+    b.classList.add("swap");
+    setTimeout(()=>{ $("copyTx").textContent = text; b.classList.toggle("done", done); b.classList.remove("swap"); }, calm ? 0 : 120);
+  };
+  try{ await navigator.clipboard.writeText("+"+WA); say("Copiado", true); }
+  catch{ const r = document.createRange(); r.selectNodeContents($("phoneNum")); const s = getSelection(); s.removeAllRanges(); s.addRange(r); say("Número seleccionado", false); }
+  setTimeout(()=>say("Copiar número", false), 1800);
 });
 render();
+window.griyataReady = true;
 </script>
