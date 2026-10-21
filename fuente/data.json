@@ -21,6 +21,16 @@
  },
  {
   "s": "MUJER",
+  "n": "Club de nuit Maleka",
+  "c": 90580,
+  "t": 108696,
+  "notes": "Lichi · Iris · Praliné",
+  "b": "Armaf",
+  "img": "https://fimgs.net/mdimg/perfume-thumbs/dark-375x500.106168.2x.avif",
+  "foto": "b5664e408ed3.avif"
+ },
+ {
+  "s": "MUJER",
   "n": "Hawas for Her",
   "c": 76005,
   "t": 91206,
@@ -111,6 +121,16 @@
  },
  {
   "s": "MUJER",
+  "n": "Yara candy",
+  "c": 80770,
+  "t": 96924,
+  "notes": "Grosella negra · Caramelo de frutilla · Vainilla",
+  "b": "Lattafa",
+  "img": "https://fimgs.net/mdimg/perfume-thumbs/dark-375x500.95752.2x.avif",
+  "foto": "eca73ed138bd.avif"
+ },
+ {
+  "s": "MUJER",
   "n": "Yara elixir",
   "c": 84855,
   "t": 101826,
@@ -118,6 +138,16 @@
   "b": "Lattafa",
   "img": "https://fimgs.net/mdimg/perfume-thumbs/dark-375x500.117615.avif",
   "foto": "117615.avif"
+ },
+ {
+  "s": "MUJER",
+  "n": "Yara tous",
+  "c": 72670,
+  "t": 87204,
+  "notes": "Mango · Coco · Vainilla",
+  "b": "Lattafa",
+  "img": "https://fimgs.net/mdimg/perfume-thumbs/dark-375x500.83320.2x.avif",
+  "foto": "d0e27f2d99eb.avif"
  },
  {
   "s": "UNISEX",
@@ -178,6 +208,16 @@
   "b": "Armaf",
   "img": "https://fimgs.net/mdimg/perfume-thumbs/dark-375x500.83132.avif",
   "foto": "83132.avif"
+ },
+ {
+  "s": "UNISEX",
+  "n": "Opulent dubai",
+  "c": 72670,
+  "t": 87204,
+  "notes": "Mango · Jazmín · Ámbar gris",
+  "b": "Lattafa",
+  "img": "https://fimgs.net/mdimg/perfume-thumbs/dark-375x500.105609.2x.avif",
+  "foto": "20b783ab0aa9.avif"
  },
  {
   "s": "UNISEX",
@@ -251,6 +291,16 @@
  },
  {
   "s": "HOMBRE",
+  "n": "Atlas",
+  "c": 81770,
+  "t": 98124,
+  "notes": "Sal marina · Iris · Ámbar gris",
+  "b": "Lattafa",
+  "img": "https://fimgs.net/mdimg/perfume-thumbs/dark-375x500.89765.2x.avif",
+  "foto": "16cb4e3e2786.avif"
+ },
+ {
+  "s": "HOMBRE",
   "n": "Club de nuit Urban Man Elixir",
   "c": 93485,
   "t": 112182,
@@ -318,6 +368,26 @@
   "b": "Lattafa",
   "img": "https://fimgs.net/mdimg/perfume-thumbs/dark-375x500.84302.avif",
   "foto": "84302.avif"
+ },
+ {
+  "s": "HOMBRE",
+  "n": "Jean lowe inmortal",
+  "c": 72670,
+  "t": 87204,
+  "notes": "Pomelo · Jengibre · Ambroxan",
+  "b": "Maison Alhambra",
+  "img": "https://fimgs.net/mdimg/perfume-thumbs/dark-375x500.83666.2x.avif",
+  "foto": "436650304fa1.avif"
+ },
+ {
+  "s": "HOMBRE",
+  "n": "Jean lowe vibe",
+  "c": 77970,
+  "t": 93564,
+  "notes": "Menta · Damasco · Higo",
+  "b": "Maison Alhambra",
+  "img": "https://fimgs.net/mdimg/perfume-thumbs/dark-375x500.103352.2x.avif",
+  "foto": "75ebdc3d5316.avif"
  },
  {
   "s": "HOMBRE",
