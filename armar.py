@@ -1,5 +1,5 @@
-"""Arma index.html a partir de fuente/: mete los datos, las fotos y el logo dentro de la página."""
-import json, base64
+"""Arma index.html a partir de fuente/: mete los datos, las fotos y los logos dentro de la página."""
+import json, base64, os
 
 def b64(p, m):
     return 'data:%s;base64,%s' % (m, base64.b64encode(open(p, 'rb').read()).decode())
@@ -13,6 +13,10 @@ t = (t.replace('__LOGO__', b64('fuente/logo.png', 'image/png'))
       .replace('__FIRST_IMG__', next(iter(imgs.values()), ''))
       .replace('__DATA__', json.dumps(data, ensure_ascii=False))
       .replace('__IMGS__', json.dumps(imgs)))
+# logos de marcas: fuente/logos/<nombre>.png se usa en la plantilla como __BRAND_<nombre>__
+for f in sorted(os.listdir('fuente/logos')):
+    if f.endswith('.png'):
+        t = t.replace('__BRAND_%s__' % f[:-4], b64('fuente/logos/' + f, 'image/png'))
 
 HEAD = """<!doctype html>
 <html lang="es">

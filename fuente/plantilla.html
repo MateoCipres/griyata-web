@@ -11,7 +11,8 @@
   --ink:#f3d9b4; --muted:#c4ae8f; --accent:#f3d9b4; --accent-ink:#52131e;
   --face:"Montserrat","Avenir Next","Segoe UI",system-ui,sans-serif;
   --display:"Bodoni Moda","Didot","Bodoni 72",Georgia,serif;
-  --logo-filter:invert(1) sepia(0.45) saturate(1.3) brightness(0.96); --map-filter:invert(0.9) hue-rotate(180deg) brightness(0.9) sepia(0.2);
+  --logo:url(__LOGO__); /* embedded once, shared by the big logo and the small one in the search bar */
+  --map-filter:invert(0.9) hue-rotate(180deg) brightness(0.9) sepia(0.2);
   --r-lg:16px; --r-md:12px; --r-pill:999px;
   --out:0 0 0 1px var(--line);
   --out-sm:0 0 0 1px var(--line);
@@ -33,22 +34,38 @@ a{text-underline-offset:3px}
 .num{font-variant-numeric:tabular-nums lining-nums}
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 
-/* contact strip */
+/* top strip: section links on the left, Instagram icon on the right, always one line */
 .topbar{background:var(--wine);color:var(--cream);font-size:13px}
-.topbar-in{display:flex;align-items:center;justify-content:space-between;gap:16px;min-height:42px}
-.topbar-note{color:var(--muted);letter-spacing:0.02em}
-.topbar-links{display:flex;gap:6px 22px;flex-wrap:wrap}
-.topbar a{display:inline-flex;align-items:center;gap:8px;color:var(--cream);text-decoration:none;font-weight:600;padding:8px 0;transition:opacity 160ms ease}
+.topbar-in{display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:42px}
+.topnav{display:flex;gap:22px;white-space:nowrap}
+.topnav .short{display:none}
+.topbar a{display:inline-flex;align-items:center;gap:8px;color:var(--cream);text-decoration:none;font-weight:600;padding:10px 0;transition:opacity 160ms ease}
 .topbar a:active{opacity:0.7}
+.topbar-ig{flex:none;justify-content:center;min-width:40px;margin-right:-11px}
 
-/* header */
-header{padding-block:clamp(16px,3vw,32px) 8px;display:grid;justify-items:center;text-align:center;gap:18px}
-.brand{margin:0 0 6px;line-height:0;width:100%}
-.brand img{width:100%;height:auto;aspect-ratio:1800/800;border-radius:var(--r-lg);box-shadow:var(--float);background:#0d0b08}
+/* header: same wine as the contact strip and the carousel, so the top of the page reads as one piece */
+header{background:var(--wine)}
+.hero-in{padding-block:clamp(16px,3vw,32px) 0;display:grid;justify-items:center;text-align:center;gap:18px}
+/* short, faint cream rule that separates the logo block from the carousel without a colour change */
+.hero-rule{width:clamp(48px,10vw,88px);height:1px;margin:clamp(32px,5vw,48px) 0 0;border:0;background:var(--cream);opacity:0.3}
+/* the logo is the hero for now (the banner is on hold until the new one is ready) */
+.brand{margin:clamp(16px,4vw,40px) 0 4px;line-height:0;width:100%;display:grid;justify-items:center}
+.brand-logo{position:relative;display:block;width:min(560px,84vw);aspect-ratio:900/351}
+/* layer 1: the logo itself, painted exactly in the palette cream through the same mask, so the lighter shine reads on top */
+.brand-logo::before{content:"";position:absolute;inset:0;background:var(--cream);
+  -webkit-mask:var(--logo) center/contain no-repeat;mask:var(--logo) center/contain no-repeat}
+/* layer 2: the shine. The box is masked with the logo PNG (its transparency), so light only lands on the strokes;
+   inside it a soft diagonal band waits off to the left and crosses when JS adds .go (only transform moves) */
+.shine{position:absolute;inset:0;overflow:hidden;pointer-events:none;
+  -webkit-mask:var(--logo) center/contain no-repeat;mask:var(--logo) center/contain no-repeat}
+.shine::before{content:"";position:absolute;top:-10%;bottom:-10%;left:0;width:35%;
+  background:linear-gradient(90deg,transparent,rgb(252 246 238 / 0.95) 50%,transparent);transform:translateX(-120%) skewX(-20deg)}
+.shine.go::before{animation:sweep 1200ms cubic-bezier(0.4,0,0.2,1)}
+@keyframes sweep{from{transform:translateX(-120%) skewX(-20deg)}to{transform:translateX(320%) skewX(-20deg)}}
 .intro{margin:0;max-width:44ch;color:var(--muted);font-size:clamp(15px,1.4vw,17px)}
 
 /* edición especial */
-.feat{background:var(--wine);margin-top:clamp(28px,4vw,44px);padding-block:clamp(36px,5vw,56px) clamp(32px,4vw,48px)}
+.feat{background:var(--wine);padding-block:clamp(32px,5vw,48px) clamp(32px,4vw,48px)}
 .feat-head{text-align:center;margin-bottom:26px}
 .feat h2{margin:0 auto 10px;font-family:var(--display);font-weight:600;font-size:clamp(32px,5vw,52px);line-height:1.05;letter-spacing:-0.01em;text-wrap:balance}
 .feat-head p{margin:0 auto;max-width:44ch;color:var(--muted);text-wrap:balance}
@@ -61,6 +78,9 @@ header{padding-block:clamp(16px,3vw,32px) 8px;display:grid;justify-items:center;
 .feat-track::-webkit-scrollbar{display:none}
 /* bottles fade into the wine at both edges instead of being sliced; fixed overlays, so scrolling stays cheap */
 .feat-strip{position:relative}
+/* invisible band over the row of "Comprar" links: the floating WhatsApp button watches this band rather than each
+   drifting link, so it does not flicker as the carousel moves (see fabWatch in the JS) */
+.buy-band{position:absolute;left:0;right:0;bottom:8px;height:44px;pointer-events:none}
 .feat-strip::before,.feat-strip::after{content:"";position:absolute;top:0;bottom:0;width:clamp(20px,5vw,64px);z-index:1;pointer-events:none}
 .feat-strip::before{left:0;background:linear-gradient(90deg,var(--wine),transparent)}
 .feat-strip::after{right:0;background:linear-gradient(270deg,var(--wine),transparent)}
@@ -89,7 +109,7 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 .controls .bar{display:flex;flex-wrap:wrap;gap:14px 18px;align-items:center;justify-content:center}
 .mini-logo{flex:none;display:block;width:140px;line-height:0;opacity:0;transform:translateY(-6px);pointer-events:none;
   transition:opacity 200ms var(--ease-out),transform 200ms var(--ease-out)}
-.mini-img{display:block;width:100%;aspect-ratio:900/351;background:url(__LOGO__) center/contain no-repeat;filter:var(--logo-filter)}
+.mini-img{display:block;width:100%;aspect-ratio:900/351;background:var(--cream);-webkit-mask:var(--logo) center/contain no-repeat;mask:var(--logo) center/contain no-repeat}
 body.scrolled .mini-logo{opacity:1;transform:none;pointer-events:auto}
 body.scrolled .controls{box-shadow:0 1px 0 var(--line)}
 .filt{position:relative;height:50px;padding:0 20px}
@@ -194,10 +214,42 @@ body:has(.zoom[open]){overflow:hidden}
 }
 .empty{text-align:center;color:var(--muted);padding:56px 0 0;max-width:40ch;margin:0 auto}
 
-/* footer */
-footer{padding-block:24px 56px}
-.where{padding-block:24px 40px}
-.where > h2{margin:0 0 22px;text-align:center;font-family:var(--display);font-size:clamp(28px,3vw,36px);font-weight:600}
+/* footer (extra room at the bottom so the floating WhatsApp button never sits on the last line) */
+footer{padding-block:24px 104px}
+.where,.orig,.faq{padding-block:24px 40px}
+.where > h2,.orig > h2,.faq > h2{margin:0 0 22px;text-align:center;font-family:var(--display);font-size:clamp(28px,3vw,36px);font-weight:600;text-wrap:balance}
+/* sections reached from the top links stop just below the sticky search bar (its height is measured by JS) */
+#originales,#ubicacion,#preguntas{scroll-margin-top:calc(var(--controls-h,90px) + 12px)}
+
+/* originality: one surface, a row per brand split by hairlines */
+.orig-box,.faq-list{background:var(--surface);border-radius:var(--r-lg);box-shadow:var(--out);max-width:880px;margin:0 auto}
+.orig-row{display:grid;grid-template-columns:minmax(120px,200px) minmax(0,1fr);gap:6px 28px;padding:22px clamp(18px,3vw,32px)}
+.orig-row + .orig-row{border-top:1px solid var(--line)}
+.orig-row h3{margin:0;font-family:var(--display);font-size:22px;font-weight:600;line-height:1.25}
+.orig-brand{display:grid;gap:12px;align-content:start}
+.orig-logos{display:flex;align-items:center;gap:14px;min-height:58px}
+.orig-logos img{display:block;flex:none}
+.orig-row p{margin:0;color:var(--muted);max-width:65ch}
+.dom{color:var(--ink);font-weight:700;overflow-wrap:anywhere}
+
+/* FAQ: native <details>, so it works with keyboard and screen readers; the chevron turns, the answer fades in */
+.faq-item + .faq-item{border-top:1px solid var(--line)}
+.faq-item summary{list-style:none;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:18px clamp(18px,3vw,28px);font-weight:600;cursor:pointer;border-radius:var(--r-lg)}
+.faq-item summary::-webkit-details-marker{display:none}
+.faq-item summary::after{content:"";flex:none;width:8px;height:8px;margin-right:4px;border-right:2px solid var(--muted);border-bottom:2px solid var(--muted);transform:translateY(-2px) rotate(45deg);transition:transform 250ms var(--ease-out)}
+.faq-item[open] summary::after{transform:translateY(2px) rotate(-135deg)}
+.faq-a{padding:0 clamp(18px,3vw,28px) 20px;color:var(--muted)}
+.faq-a p{margin:0;max-width:65ch}
+.faq-a a{color:var(--ink);font-weight:600}
+.faq-item[open] .faq-a{animation:faq-in 300ms var(--ease-out)}
+@keyframes faq-in{from{opacity:0;transform:translateY(-6px)}}
+
+/* floating WhatsApp: cream so it reads on both the wine and the dark sections */
+.fab{position:fixed;z-index:6;right:max(16px,env(safe-area-inset-right,0px));bottom:max(16px,env(safe-area-inset-bottom,0px));width:56px;height:56px;border-radius:50%;
+  display:grid;place-items:center;background:var(--cream);color:var(--wine);box-shadow:0 12px 28px -10px rgb(0 0 0 / 0.75);
+  transition:opacity 200ms var(--ease-out),transform 200ms var(--ease-out)}
+.fab.off{opacity:0;transform:scale(0.8);pointer-events:none}
+.fab:active{transform:scale(0.94)}
 .where-box{background:var(--surface);border-radius:var(--r-lg);box-shadow:var(--out);padding:16px;display:grid;grid-template-columns:minmax(0,2fr) minmax(260px,1fr);gap:16px}
 .map{border-radius:var(--r-md);overflow:hidden;min-height:340px;background:var(--well);line-height:0}
 .map iframe{width:100%;height:100%;min-height:340px;border:0;filter:var(--map-filter)}
@@ -231,9 +283,9 @@ footer{padding-block:24px 56px}
 @keyframes pop{from{opacity:0;transform:scale(0.6)}}
 @keyframes pop-out{to{opacity:0;transform:scale(0.6)}}
 
-/* page load: strip slides down, banner settles from 103 % (no fade, so it shows at once), intro rises */
+/* page load: strip slides down, logo settles from 103 % (no fade, so it shows at once), intro rises */
 .topbar{animation:drop-in 400ms var(--ease-out) both}
-.brand img{animation:settle 600ms var(--ease-out) both}
+.brand-logo{animation:settle 600ms var(--ease-out) both}
 .intro{animation:rise 500ms var(--ease-out) 150ms both}
 
 /* scroll reveals: sections, carousel bottles and footer blocks (--d is a per-element delay) */
@@ -263,7 +315,8 @@ footer{padding-block:24px 56px}
 .copy.swap #copyTx{opacity:0}
 
 /* WhatsApp / Instagram / Comprar: small icon gestures, underline that draws in on the contact strip */
-.wa svg,.btn svg,.topbar svg,.fbuy svg{transition:transform 200ms var(--ease-out)}
+.wa svg,.btn svg,.topbar svg,.fbuy svg,.fab svg{transition:transform 200ms var(--ease-out)}
+.js-anim .fab{animation:pop 300ms var(--ease-out) 700ms backwards}   /* backwards, not both: .off must still be able to hide it afterwards */
 .topbar a span{position:relative}
 .topbar a span::after{content:"";position:absolute;left:0;right:0;bottom:-3px;height:1px;background:currentColor;transform:scaleX(0);transform-origin:left;transition:transform 300ms var(--ease-out)}
 @media (hover:hover) and (pointer:fine){
@@ -271,14 +324,18 @@ footer{padding-block:24px 56px}
   .card:hover::after{opacity:1}
   .wa:hover svg,.topbar a:hover svg,a.btn[href*="instagram"]:hover svg{transform:rotate(-8deg) scale(1.08)}
   .topbar a:hover span::after,.fbuy:hover span::after{transform:scaleX(1)}
+  .fab:hover{transform:scale(1.06)}
+  .fab:hover svg{transform:rotate(-8deg)}
+  .faq-item summary:hover::after{border-color:var(--ink)}
   .fbuy:hover svg{transform:rotate(-8deg) scale(1.08)}
 }
 
-@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important;animation:none!important}}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important;animation:none!important}.shine{display:none}}
 @media (max-width:560px){
-  .topbar-note{display:none}
-  .topbar-in{justify-content:center}
-  .topbar-links{justify-content:center;gap:4px 18px}
+  .topnav{gap:16px}
+  .topnav .long{display:none}
+  .topnav .short{display:inline}
+  .orig-row{grid-template-columns:minmax(0,1fr)}
   .feat-head{margin-bottom:20px}
   .feat-track{column-gap:12px}
   .controls{padding-block:10px}
@@ -312,11 +369,16 @@ footer{padding-block:24px 56px}
   .zoom-in{padding:max(12px,env(safe-area-inset-top,0px)) max(12px,env(safe-area-inset-right,0px)) max(16px,env(safe-area-inset-bottom,0px)) max(12px,env(safe-area-inset-left,0px))}
   .zoom-close{top:max(22px,calc(env(safe-area-inset-top,0px) + 10px));right:max(22px,calc(env(safe-area-inset-right,0px) + 10px))}
   .zoom-info .wa{width:100%}
-  .brand img{border-radius:12px}
   .where-box{grid-template-columns:1fr;padding:10px}
   .map,.map iframe{min-height:280px}
   .where-info{padding:8px 8px 10px}
   .where-info .btn{justify-self:stretch;justify-content:center}
+}
+/* very narrow phones (320–340 px): the top strip tightens so it still fits on one line */
+@media (max-width:340px){
+  .topbar{font-size:12px}
+  .topbar-in{gap:8px}
+  .topnav{gap:10px}
 }
 </style>
 <script>
@@ -329,20 +391,21 @@ if(!matchMedia("(prefers-reduced-motion: reduce)").matches){
 
 <div class="topbar">
   <div class="wrap topbar-in">
-    <span class="topbar-note">Pedidos y consultas</span>
-    <nav class="topbar-links" aria-label="Contacto">
-      <a href="https://wa.me/543482664743" target="_blank" rel="noopener"><svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2Zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.2-.4.2-.4.7-1.3.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.7 11.8 11.8 0 0 0 4.5 4c1.7.7 2.3.8 3.2.6.5-.1 1.5-.6 1.7-1.2.2-.6.2-1.1.2-1.2l-.5-.3Z"/></svg><span class="num">3482 66-4743</span></a>
-      <a href="https://www.instagram.com/griyata.parfums/" target="_blank" rel="noopener"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg><span>@griyata.parfums</span></a>
+    <nav class="topnav" aria-label="Secciones">
+      <a href="#ubicacion"><span>Ubicación</span></a>
+      <a href="#preguntas"><span class="long">Preguntas frecuentes</span><span class="short">Preguntas</span></a>
+      <a href="#originales"><span>¿Son originales?</span></a>
     </nav>
+    <a class="topbar-ig" href="https://www.instagram.com/griyata.parfums/" target="_blank" rel="noopener" aria-label="Instagram de Griyata Parfums"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg></a>
   </div>
 </div>
 
-<header class="wrap" id="top">
-  <h1 class="brand"><picture>
-    <source type="image/webp" srcset="img/banner-900.webp 900w, img/banner-1800.webp 1800w" sizes="(max-width: 1180px) 100vw, 1148px">
-    <img src="img/banner-1800.jpg" width="1800" height="800" alt="Griyata Parfums" fetchpriority="high">
-  </picture></h1>
-  <p class="intro">Perfumes árabes originales. Elegí el tuyo y pedilo por WhatsApp. Retiro en Malabrigo o envío dentro de la ciudad.</p>
+<header id="top">
+  <div class="wrap hero-in">
+    <h1 class="brand"><span class="sr">Griyata Parfums</span><span class="brand-logo" aria-hidden="true"><span class="shine"></span></span></h1>
+    <p class="intro">Perfumes árabes originales. Elegí el tuyo y pedilo por WhatsApp. Retiro en Malabrigo o envío dentro de la ciudad.</p>
+    <hr class="hero-rule">
+  </div>
 </header>
 
 <section class="feat" id="especial" aria-labelledby="feat-title">
@@ -350,7 +413,7 @@ if(!matchMedia("(prefers-reduced-motion: reduce)").matches){
     <h2 id="feat-title">Aromas que te definen</h2>
     <p>Nuestra edición especial: perfumes con carácter, para los que quieren dejar huella donde pasan.</p>
   </div>
-  <div class="feat-strip"><div class="feat-track" id="featTrack" role="region" aria-roledescription="carrusel" aria-label="Edición especial" tabindex="0"></div></div>
+  <div class="feat-strip"><div class="feat-track" id="featTrack" role="region" aria-roledescription="carrusel" aria-label="Edición especial" tabindex="0"></div><span class="buy-band" aria-hidden="true"></span></div>
 </section>
 
 <div class="controls" id="controls">
@@ -392,6 +455,49 @@ if(!matchMedia("(prefers-reduced-motion: reduce)").matches){
   <button class="zoom-close" id="zClose" type="button" aria-label="Cerrar"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
 </dialog>
 
+<section class="orig wrap" id="originales" aria-labelledby="orig-title">
+  <h2 id="orig-title" data-reveal>¿Cómo saber si son originales?</h2>
+  <div class="orig-box" data-reveal style="--d:100ms">
+    <!-- Logos: fuente/logos/<nombre>.png, ya en crema y con fondo transparente. width/height están calculados para que
+         todos ocupen más o menos la misma superficie aunque tengan proporciones distintas. -->
+    <div class="orig-row">
+      <div class="orig-brand">
+        <div class="orig-logos"><img src="__BRAND_lattafa__" alt="Lattafa" width="44" height="58" loading="lazy" decoding="async"></div>
+        <h3>Lattafa</h3>
+      </div>
+      <p>Traen una etiqueta holográfica con código QR. Al escanearlo, el enlace tiene que ser exactamente <span class="dom">verify.lattafa.com</span>. Si dice que el código fue escaneado muchísimas veces, puede ser una etiqueta clonada.</p>
+    </div>
+    <div class="orig-row">
+      <div class="orig-brand">
+        <div class="orig-logos"><img src="__BRAND_rasasi__" alt="Rasasi" width="98" height="28" loading="lazy" decoding="async"></div>
+        <h3>Rasasi</h3>
+      </div>
+      <p>Traen la misma etiqueta holográfica con código QR. El enlace tiene que empezar con <span class="dom">authentication.rasasistore.com</span>.</p>
+    </div>
+    <!-- Afnan: oculto hasta tener el dato. Para mostrarlo, sacá los signos de comentario, completá el texto
+         y pasá la línea <img … alt="Afnan"> de la fila "Resto de las marcas" a esta fila.
+    <div class="orig-row">
+      <div class="orig-brand">
+        <div class="orig-logos"></div>
+        <h3>Afnan</h3>
+      </div>
+      <p>…</p>
+    </div>
+    -->
+    <div class="orig-row">
+      <div class="orig-brand">
+        <div class="orig-logos">
+          <img src="__BRAND_afnan__" alt="Afnan" width="50" height="52" loading="lazy" decoding="async">
+          <img src="__BRAND_armaf__" alt="Armaf" width="51" height="51" loading="lazy" decoding="async">
+          <img src="__BRAND_maison-alhambra__" alt="Maison Alhambra" width="49" height="53" loading="lazy" decoding="async">
+        </div>
+        <h3>Resto de las marcas</h3>
+      </div>
+      <p>El código de lote (batch) impreso en la caja tiene que coincidir con el del frasco.</p>
+    </div>
+  </div>
+</section>
+
 <section class="where wrap" id="ubicacion" aria-labelledby="where-title">
   <h2 id="where-title" data-reveal>Dónde estamos</h2>
   <div class="where-box" data-reveal style="--d:100ms">
@@ -411,6 +517,22 @@ if(!matchMedia("(prefers-reduced-motion: reduce)").matches){
   </div>
 </section>
 
+<section class="faq wrap" id="preguntas" aria-labelledby="faq-title">
+  <h2 id="faq-title" data-reveal>Preguntas frecuentes</h2>
+  <div class="faq-list" data-reveal style="--d:100ms">
+    <!-- Para sumar una pregunta: copiá un bloque <details> entero (de <details> a </details>),
+         pegalo debajo del último y cambiá la pregunta (dentro de <summary>) y la respuesta (dentro de <p>). -->
+    <details class="faq-item">
+      <summary>¿Cuánto dura el perfume?</summary>
+      <div class="faq-a"><p>Aplicalo en cuello, muñecas y ropa para que dure más (en telas claras o delicadas, probá antes en una parte que no se vea). Los perfumes dulces son los que más tienden a proyectar.</p></div>
+    </details>
+    <details class="faq-item">
+      <summary>¿Cómo sé si me va a gustar sin olerlo?</summary>
+      <div class="faq-a"><p>Pasá por <a href="#ubicacion">Troya Tech</a> y conocelo en persona antes de comprarlo.</p></div>
+    </details>
+  </div>
+</section>
+
 <footer class="wrap">
   <div class="panel">
     <div data-reveal>
@@ -426,6 +548,8 @@ if(!matchMedia("(prefers-reduced-motion: reduce)").matches){
   </div>
   <p class="imprint">Griyata Parfums · Precios en pesos argentinos · Actualizado en octubre de 2026</p>
 </footer>
+
+<a class="fab" id="fab" href="https://wa.me/543482664743" target="_blank" rel="noopener" aria-label="Escribinos por WhatsApp"><svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2Zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.2-.4.2-.4.7-1.3.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.7 11.8 11.8 0 0 0 4.5 4c1.7.7 2.3.8 3.2.6.5-.1 1.5-.6 1.7-1.2.2-.6.2-1.1.2-1.2l-.5-.3Z"/></svg></a>
 
 <script>
 const DATA = __DATA__;
@@ -497,6 +621,21 @@ function clearFilters(){
   line = "Todos"; syncLine(); $("q").value = ""; render();
 }
 $("clear").addEventListener("click", clearFilters);
+
+// logo shine: one sweep as soon as the entrance (settle) ends, then one every SHINE_EVERY ms,
+// only while the logo is on screen. The sweep itself lasts 1.2 s (see .shine.go::before in the CSS).
+const SHINE_EVERY = 7000;
+if(!calm){
+  const logo = document.querySelector(".brand-logo"), shine = logo.querySelector(".shine");
+  let started = false, onScreen = false, timer = 0;
+  const sweep = () => { shine.classList.remove("go"); void shine.offsetWidth; shine.classList.add("go"); };
+  const loop = () => { clearInterval(timer); if(started && onScreen) timer = setInterval(sweep, SHINE_EVERY); };
+  const start = () => { if(started) return; started = true; if(onScreen) sweep(); loop(); };
+  new IntersectionObserver(([e])=>{ onScreen = e.isIntersecting; loop(); }).observe(logo);
+  // the entrance may already be over on a slow load, so check before waiting for it
+  const entrance = logo.getAnimations().find(a=>a.animationName === "settle");
+  entrance && entrance.playState !== "finished" ? entrance.finished.then(start, start) : start();
+}
 
 // the small logo reuses the big one's image and appears once the big one has scrolled away
 new IntersectionObserver(([e])=>document.body.classList.toggle("scrolled", !e.isIntersecting), {rootMargin:"-40px 0px 0px 0px"}).observe(document.querySelector(".brand"));
@@ -689,6 +828,38 @@ $("copy").addEventListener("click", async e=>{
   catch{ const r = document.createRange(); r.selectNodeContents($("phoneNum")); const s = getSelection(); s.removeAllRanges(); s.addRange(r); say("Número seleccionado", false); }
   setTimeout(()=>say("Copiar número", false), 1800);
 });
+
+// the top links land each section just below the sticky search bar, whose height changes with the screen
+new ResizeObserver(()=>document.documentElement.style.setProperty("--controls-h", $("controls").offsetHeight + "px")).observe($("controls"));
+
+// floating WhatsApp button: steps aside while the catalogue is behind it (every card there has its own WhatsApp button),
+// while the carousel's row of "Comprar" links is behind it, while the filter panel is open and while a perfume is enlarged.
+// "Behind it" = an IntersectionObserver whose box is shrunk to the button's corner. Watching the whole catalogue (not each
+// card's button) means one fade out when the catalogue arrives and one fade in when it leaves: no blinking row by row.
+const FAB_RETURN = 300;   // ms the corner must stay clear before the button comes back
+const fab = $("fab"), under = new Set();
+let fabIO = null, fabT = 0;
+function fabSync(){
+  clearTimeout(fabT);
+  if(under.size || panel.dataset.open === "true" || zoom.open) fab.classList.add("off");
+  else fabT = setTimeout(()=>fab.classList.remove("off"), fab.classList.contains("off") ? FAB_RETURN : 0);
+}
+function fabWatch(){
+  fabIO?.disconnect(); under.clear();
+  const pad = 8, x = fab.offsetLeft - pad, y = fab.offsetTop - pad, s = fab.offsetWidth + 2*pad;   // layout box, ignores the hide scale
+  fabIO = new IntersectionObserver(es=>{
+    es.forEach(e=>e.isIntersecting ? under.add(e.target) : under.delete(e.target));
+    fabSync();
+  }, {rootMargin:`${-y}px ${-(innerWidth - x - s)}px ${-(innerHeight - y - s)}px ${-x}px`});
+  // the search bar sits between the carousel and the catalogue: watching it too keeps that stretch one single fade
+  document.querySelectorAll("#list, #controls, .buy-band").forEach(el=>fabIO.observe(el));
+}
+fabWatch();
+new MutationObserver(fabSync).observe(panel, {attributeFilter:["data-open"]});
+new MutationObserver(fabSync).observe(zoom, {attributeFilter:["open"]});
+let fabRT = 0;
+addEventListener("resize", ()=>{ clearTimeout(fabRT); fabRT = setTimeout(fabWatch, 150); });
+
 render();
 window.griyataReady = true;
 </script>
