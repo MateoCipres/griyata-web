@@ -23,8 +23,8 @@ HEAD = """<!doctype html>
 <meta property="og:title" content="Griyata Parfums">
 <meta property="og:description" content="Perfumes árabes originales. Catálogo con precios y pedidos por WhatsApp.">
 <meta property="og:type" content="website">
-<meta name="theme-color" content="#fffbda" media="(prefers-color-scheme: light)">
-<meta name="theme-color" content="#00371c" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#fff2ba" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0f3c65" media="(prefers-color-scheme: dark)">
 <style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
 """
 

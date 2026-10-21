@@ -7,8 +7,8 @@
 <meta property="og:title" content="Griyata Parfums">
 <meta property="og:description" content="Perfumes árabes originales. Catálogo con precios y pedidos por WhatsApp.">
 <meta property="og:type" content="website">
-<meta name="theme-color" content="#fffbda" media="(prefers-color-scheme: light)">
-<meta name="theme-color" content="#00371c" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#fff2ba" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0f3c65" media="(prefers-color-scheme: dark)">
 <style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
 <title>Griyata Parfums</title>
 <meta name="claude:viewport-fit-sides" content="cover">
@@ -16,10 +16,10 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap">
 <style>
-/* Layout: soft UI (neumorphism). One almond-cream material; every surface is pushed out of it or pressed into it. A single pine-forest accent marks actions. */
+/* Layout: soft UI (neumorphism). One buttermilk material; every surface is pushed out of it or pressed into it. A single midnight-blue accent marks actions. */
 :root{
-  --bg:#fffbda; --hi:#ffffff; --lo:#dcd5a8; --well:#f8f3cf;
-  --ink:#00371c; --muted:#4d5a3f; --accent:#00371c; --accent-ink:#fffbda; --accent-soft:#e6ecd0;
+  --bg:#fff2ba; --hi:#fffbe6; --lo:#d8c98c; --well:#f8eab0;
+  --ink:#0f3c65; --muted:#4a5a6e; --accent:#0f3c65; --accent-ink:#fff2ba; --accent-soft:#e8e4c6;
   --face:"Montserrat","Avenir Next","Segoe UI",system-ui,sans-serif;
   --logo-filter:none; --map-filter:none; --r-lg:28px; --r-md:20px; --r-pill:999px;
   --out:8px 8px 18px var(--lo),-8px -8px 18px var(--hi);
@@ -29,11 +29,11 @@
   --ease-out:cubic-bezier(0.23,1,0.32,1);
 }
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
-  --bg:#00371c; --hi:#064527; --lo:#002412; --well:#003119;
-  --ink:#fffbda; --muted:#c8c9a4; --accent:#fffbda; --accent-ink:#00371c; --accent-soft:#0d4a2b; --logo-filter:invert(0.93); --map-filter:invert(0.9) hue-rotate(180deg) brightness(0.95); color-scheme:dark}}
+  --bg:#0f3c65; --hi:#174a7a; --lo:#092a48; --well:#0d3559;
+  --ink:#fff2ba; --muted:#cfcba9; --accent:#fff2ba; --accent-ink:#0f3c65; --accent-soft:#1c4f7d; --logo-filter:invert(0.93); --map-filter:invert(0.9) hue-rotate(180deg) brightness(0.95); color-scheme:dark}}
 :root[data-theme="dark"]{
-  --bg:#00371c; --hi:#064527; --lo:#002412; --well:#003119;
-  --ink:#fffbda; --muted:#c8c9a4; --accent:#fffbda; --accent-ink:#00371c; --accent-soft:#0d4a2b; --logo-filter:invert(0.93); --map-filter:invert(0.9) hue-rotate(180deg) brightness(0.95); color-scheme:dark}
+  --bg:#0f3c65; --hi:#174a7a; --lo:#092a48; --well:#0d3559;
+  --ink:#fff2ba; --muted:#cfcba9; --accent:#fff2ba; --accent-ink:#0f3c65; --accent-soft:#1c4f7d; --logo-filter:invert(0.93); --map-filter:invert(0.9) hue-rotate(180deg) brightness(0.95); color-scheme:dark}
 
 *{box-sizing:border-box}
 html{scroll-behavior:smooth}
@@ -118,7 +118,7 @@ main{padding-block:12px 64px}
   opacity:1;transform:none;transition:opacity 220ms var(--ease-out),transform 220ms var(--ease-out),overlay 220ms allow-discrete,display 220ms allow-discrete}
 @starting-style{.zoom[open]{opacity:0;transform:scale(0.95)}}
 .zoom.closing{opacity:0;transform:scale(0.97);transition-duration:150ms}
-.zoom::backdrop{background:rgb(0 30 15 / 0.6)}
+.zoom::backdrop{background:rgb(6 26 46 / 0.6)}
 .zoom-in{height:100%;display:grid;grid-template-rows:minmax(0,1fr) auto;gap:16px;padding:16px}
 .zoom-img{border-radius:var(--r-md);background:var(--well);box-shadow:var(--in);display:grid;place-items:center;min-height:0;overflow:hidden;cursor:zoom-out}
 .zoom-img img{width:auto;height:94%;max-width:94%;object-fit:contain}
