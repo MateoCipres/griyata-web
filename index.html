@@ -314,7 +314,7 @@ footer{padding-block:24px 104px}
 .quiz-step .chips{justify-content:center}
 .quiz-nav{display:flex;flex-wrap:wrap;gap:12px;justify-content:center}
 .quiz-res{width:100%;text-align:left}
-.quiz-res .grid{grid-template-columns:repeat(auto-fit,minmax(min(210px,100%),260px));justify-content:center}   /* 2 results keep the size of 3 */
+.quiz-res .grid{grid-template-columns:repeat(auto-fit,minmax(min(210px,100%),250px));justify-content:center}   /* 3 fit in the 816 px box; 2 results keep that size */
 .quiz-note{margin:0;color:var(--muted);font-size:14px;text-wrap:balance}
 
 /* cómo comprar: three numbered steps, then how to pay, on one surface split by a hairline */
@@ -1016,12 +1016,13 @@ new MutationObserver(fabSync).observe(zoom, {attributeFilter:["open"]});
 let fabRT = 0;
 addEventListener("resize", ()=>{ clearTimeout(fabRT); fabRT = setTimeout(fabWatch, 150); });
 
-// encontrá tu aroma: four questions (for whom, season, aroma, budget), then the 2–3 perfumes in stock that match best.
-// Line and season are fixed: only perfumes of that line (Mujer/Hombre also bring Unisex) that have the chosen season,
-// main or second. The aroma question only offers aromas with at least 2 such perfumes, so the result never has to
-// leave the season; a season with no aroma left is not offered either. Score: the aroma as main family 2, as second
-// family 1; the exact line adds 1; the season as main 1, as second 0.5. Budget is the only limit that is relaxed
-// (and said so) when fewer than 2 perfumes are left.
+// encontrá tu aroma: four questions (for whom, choose by season or by aroma, which season/aroma, budget), then the
+// 2–3 perfumes in stock that match best. Only options with at least 2 perfumes of the chosen line are offered
+// (Mujer/Hombre also bring Unisex; the exact line adds 1 to the score).
+// By season: only perfumes with that season; main season 1, second 0.5.
+// By aroma: only perfumes with that family, main 2, second 1; today's season in Argentina adds 1 as main season and
+// 0.5 as second, so in-season perfumes come first without dropping the rest.
+// Budget is the only limit that is relaxed (and said so) when fewer than 2 perfumes are left.
 // Budget steps: the cash prices split in three groups of about the same size, rounded to thousands and at least
 // $10.000 apart, recalculated on every build from the day's prices.
 const BUDGET = (() => {
@@ -1031,28 +1032,35 @@ const BUDGET = (() => {
   if(lo < PMIN){ lo = Math.ceil(PMIN/1000)*1000; hi = Math.max(hi, lo + 10000); }
   return [lo, hi].filter(v=>v < PMAX).map(v=>[`Hasta ${fmt(v)}`, v]).concat([["No importa", Infinity]]);
 })();
-const AROMAS = [["Dulce y cálido",["Dulces"]],["Fresco y limpio",["Frescos","Cítricos"]],["Frutal",["Frutales"]],["Floral",["Florales"]],["Intenso: madera y especias",["Amaderados","Especiados"]]]
+const AROMAS = [["Dulce",["Dulces"]],["Fresco",["Frescos","Cítricos"]],["Frutal",["Frutales"]],["Floral",["Florales"]],["Amaderado y especiado",["Amaderados","Especiados"]]]
   .filter(([,f])=>f.some(x=>FAMS.includes(x)));
 const WHO = [["Mujer",{lines:["MUJER","UNISEX"],pref:"MUJER"}],["Hombre",{lines:["HOMBRE","UNISEX"],pref:"HOMBRE"}],["Unisex",{lines:["UNISEX"],pref:"UNISEX"}]];
-const fits = (who, season) => DATA.filter(p=>who.lines.includes(p.s) && seasOf(p).includes(season));
-const aromasFor = (who, season) => { const pool = fits(who, season); return AROMAS.filter(([,f])=>pool.filter(p=>famOf(p).some(x=>f.includes(x))).length >= 2); };
-// each question's options can depend on the earlier answers
+const lineOf = who => DATA.filter(p=>who.lines.includes(p.s));
+const hasFam = (p, fam) => famOf(p).some(x=>fam.includes(x));
+const seasonsFor = who => SEASONS.filter(e=>lineOf(who).filter(p=>seasOf(p).includes(e)).length >= 2).map(e=>[e, e]);
+const aromasFor = who => AROMAS.filter(([,f])=>lineOf(who).filter(p=>hasFam(p, f)).length >= 2);
+// today's season in Argentina (southern hemisphere), whatever the visitor's own time zone
+const NOW_SEASON = (() => {
+  const d = Object.fromEntries(new Intl.DateTimeFormat("en", {timeZone:"America/Argentina/Buenos_Aires", month:"numeric", day:"numeric"}).formatToParts(new Date()).map(x=>[x.type, +x.value]));
+  const md = d.month * 100 + d.day;
+  return md >= 1221 || md < 321 ? "Verano" : md < 621 ? "Otoño" : md < 921 ? "Invierno" : "Primavera";
+})();
+// each question's title and options can depend on the earlier answers
 const QUIZ = [
   ["¿Para quién es?", () => WHO],
-  ["¿Para cuándo lo querés?", ([who]) => SEASONS.filter(e=>aromasFor(who, e).length).map(e=>[e, e])],
-  ["¿Qué aroma te gusta más?", ([who, season]) => aromasFor(who, season)],
+  ["¿Cómo querés elegir?", ([who]) => [["Por estación","est"], ["Por aroma","aroma"]].filter(([,m])=>(m === "est" ? seasonsFor : aromasFor)(who).length)],
+  [([, mode]) => mode === "est" ? "¿Para qué estación?" : "¿Qué aroma te gusta más?", ([who, mode]) => mode === "est" ? seasonsFor(who) : aromasFor(who)],
   ["¿Cuánto querés gastar? (precio de contado)", () => BUDGET]
 ];
 let qStep = -1, qAns = [], qOpts = [];
-function recommend([who, season, fam, max]){
-  const score = p => {
-    const f = famOf(p), e = seasOf(p);
-    const s = fam.includes(f[0]) ? 2 : f.some(x=>fam.includes(x)) ? 1 : 0;
-    return s && s + (p.s === who.pref ? 1 : 0) + (e[0] === season ? 1 : 0.5);
-  };
-  const rank = list => list.map(p=>[p,score(p)]).filter(([,s])=>s>0)
+function recommend([who, mode, pick, max]){
+  const seasonPts = (p, e) => seasOf(p)[0] === e ? 1 : seasOf(p).includes(e) ? 0.5 : 0;
+  const score = mode === "est"
+    ? p => 1 + seasonPts(p, pick) + (p.s === who.pref ? 1 : 0)
+    : p => { const f = famOf(p); return (pick.includes(f[0]) ? 2 : 1) + (p.s === who.pref ? 1 : 0) + seasonPts(p, NOW_SEASON); };
+  const rank = list => list.map(p=>[p,score(p)])
     .sort((x,y)=>y[1]-x[1] || !!IMGS[y[0].i] - !!IMGS[x[0].i] || x[0].c - y[0].c).map(([p])=>p);
-  const pool = fits(who, season);
+  const pool = lineOf(who).filter(p => mode === "est" ? seasOf(p).includes(pick) : hasFam(p, pick));
   let res = rank(pool.filter(p=>p.c <= max)), note = "";
   if(res.length < 2 && max < Infinity){
     const all = rank(pool);
@@ -1064,7 +1072,7 @@ function renderQuiz(){
   const body = $("quizBody");
   if(qStep < 0){ body.innerHTML = `<button class="btn primary" id="quizStart" type="button">Empezar</button>`; return; }
   if(qStep < QUIZ.length){
-    const [q, optsFor] = QUIZ[qStep], opts = qOpts = optsFor(qAns);
+    const [title, optsFor] = QUIZ[qStep], q = typeof title === "function" ? title(qAns) : title, opts = qOpts = optsFor(qAns);
     body.innerHTML = `<div class="quiz-step"><p class="quiz-prog num">Pregunta ${qStep+1} de ${QUIZ.length}</p><h3 tabindex="-1">${q}</h3>
       <div class="chips">${opts.map(([l],k)=>`<button class="chip" type="button" data-o="${k}">${esc(l)}</button>`).join("")}</div>
       ${qStep ? `<div class="quiz-nav"><button class="btn" type="button" data-q="back">Atrás</button></div>` : ""}</div>`;
@@ -1087,7 +1095,7 @@ $("quizBody").addEventListener("click", e=>{
   else return;
   renderQuiz();
 });
-if(!AROMAS.length) $("aroma").hidden = true;
+if(!AROMAS.length && !SEASONS.length) $("aroma").hidden = true;
 
 // "Cómo comprar" in the top strip: CSS hides it under 420 px; this also drops it whenever the strip would not fit on one line
 const navBuy = document.querySelector(".nav-buy"), topIn = document.querySelector(".topbar-in");
