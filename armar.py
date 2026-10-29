@@ -6,7 +6,8 @@ def b64(p, m):
 
 d = json.load(open('fuente/data.json', encoding='utf8'))
 MIME = {'avif': 'image/avif', 'jpg': 'image/jpeg', 'png': 'image/png', 'webp': 'image/webp'}
-data = [dict(i=i, s=p['s'], n=p['n'], b=p.get('b', ''), c=p['c'], t=p['t'], notes=p['notes']) for i, p in enumerate(d)]
+data = [dict(i=i, s=p['s'], n=p['n'], b=p.get('b', ''), c=p['c'], t=p['t'], notes=p['notes'],
+             fam=p.get('fam', []), ing=p.get('ing', '')) for i, p in enumerate(d)]
 imgs = {i: b64('fuente/fotos/' + p['foto'], MIME[p['foto'].rsplit('.', 1)[1]]) for i, p in enumerate(d) if p.get('foto')}
 t = open('fuente/plantilla.html', encoding='utf8').read()
 t = (t.replace('__LOGO__', b64('fuente/logo.png', 'image/png'))
@@ -18,6 +19,8 @@ for f in sorted(os.listdir('fuente/logos')):
     if f.endswith('.png'):
         t = t.replace('__BRAND_%s__' % f[:-4], b64('fuente/logos/' + f, 'image/png'))
 
+# vista previa al compartir el link (WhatsApp, Instagram, X): og.png vive aparte en la raíz del repo, con URL absoluta
+SITIO = 'https://mateocipres.github.io/griyata-web/'
 HEAD = """<!doctype html>
 <html lang="es">
 <head>
@@ -27,9 +30,23 @@ HEAD = """<!doctype html>
 <meta property="og:title" content="Griyata Parfums">
 <meta property="og:description" content="Perfumes árabes originales. Catálogo con precios y pedidos por WhatsApp.">
 <meta property="og:type" content="website">
+<meta property="og:site_name" content="Griyata Parfums">
+<meta property="og:locale" content="es_AR">
+<meta property="og:url" content="__SITIO__">
+<meta property="og:image" content="__SITIO__og.png">
+<meta property="og:image:secure_url" content="__SITIO__og.png">
+<meta property="og:image:type" content="image/png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Logo de Griyata Parfums sobre fondo bordó">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Griyata Parfums">
+<meta name="twitter:description" content="Perfumes árabes originales. Catálogo con precios y pedidos por WhatsApp.">
+<meta name="twitter:image" content="__SITIO__og.png">
+<meta name="twitter:image:alt" content="Logo de Griyata Parfums sobre fondo bordó">
 <meta name="theme-color" content="#52131e">
 <style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
-"""
+""".replace('__SITIO__', SITIO)
 
 # la plantilla empieza con <title>, los <link> y el <style>: eso va en <head>; el resto en <body>
 cut = t.index('</style>') + len('</style>')

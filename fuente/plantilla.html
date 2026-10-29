@@ -217,9 +217,9 @@ body:has(.zoom[open]){overflow:hidden}
 /* footer (extra room at the bottom so the floating WhatsApp button never sits on the last line) */
 footer{padding-block:24px 104px}
 .where,.orig,.faq{padding-block:24px 40px}
-.where > h2,.orig > h2,.faq > h2{margin:0 0 22px;text-align:center;font-family:var(--display);font-size:clamp(28px,3vw,36px);font-weight:600;text-wrap:balance}
+.where > h2,.orig > h2,.faq > h2,.how > h2{margin:0 0 22px;text-align:center;font-family:var(--display);font-size:clamp(28px,3vw,36px);font-weight:600;text-wrap:balance}
 /* sections reached from the top links stop just below the sticky search bar (its height is measured by JS) */
-#originales,#ubicacion,#preguntas{scroll-margin-top:calc(var(--controls-h,90px) + 12px)}
+#originales,#ubicacion,#preguntas,#comprar{scroll-margin-top:calc(var(--controls-h,90px) + 12px)}
 
 /* originality: one surface, a row per brand split by hairlines */
 .orig-box,.faq-list{background:var(--surface);border-radius:var(--r-lg);box-shadow:var(--out);max-width:880px;margin:0 auto}
@@ -273,6 +273,46 @@ footer{padding-block:24px 104px}
 .btn.primary{background:var(--cream);color:var(--wine);box-shadow:none}
 .imprint{text-align:center;color:var(--muted);font-size:13px;margin:28px 0 0}
 
+/* "Cómo comprar" in the top strip only where it fits on one line; below 420 px the hero link covers it,
+   and JS also drops it if the strip would ever overflow (long words, bigger system font) */
+@media (max-width:419px){.topnav .nav-buy{display:none}}
+.intro-link{margin-top:-6px;color:var(--cream);font-size:14px;font-weight:600;text-underline-offset:4px;text-decoration-thickness:1px}
+
+/* encontrá tu aroma: a three-question quiz on one surface, between the carousel and the catalogue */
+.quiz{padding-block:clamp(32px,5vw,48px) 8px}
+.quiz-box{background:var(--surface);border-radius:var(--r-lg);box-shadow:var(--out);padding:clamp(20px,4vw,32px);max-width:880px;margin:0 auto;text-align:center}
+.quiz-box h2{margin:0 0 8px;font-family:var(--display);font-size:clamp(28px,3vw,36px);font-weight:600;text-wrap:balance}
+.quiz-box > p{margin:0 auto 20px;max-width:46ch;color:var(--muted);text-wrap:balance}
+.quiz-step{display:grid;gap:16px;justify-items:center}
+.quiz-step h3{margin:0;font-size:18px;font-weight:600;text-wrap:balance;outline:none}   /* focused by JS only so keyboard and screen readers follow the step */
+.quiz-prog{margin:0 0 -8px;color:var(--muted);font-size:13px}
+.quiz-step .chips{justify-content:center}
+.quiz-nav{display:flex;flex-wrap:wrap;gap:12px;justify-content:center}
+.quiz-res{width:100%;text-align:left}
+.quiz-res .grid{grid-template-columns:repeat(auto-fit,minmax(min(210px,100%),1fr))}
+.quiz-note{margin:0;color:var(--muted);font-size:14px;text-wrap:balance}
+
+/* cómo comprar: three numbered steps, then how to pay, on one surface split by a hairline */
+.how{padding-block:24px 40px}
+.how-box{background:var(--surface);border-radius:var(--r-lg);box-shadow:var(--out);max-width:880px;margin:0 auto}
+.steps{list-style:none;margin:0;padding:clamp(22px,3vw,30px) clamp(18px,3vw,32px);display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px 28px}
+.steps li{display:grid;grid-template-columns:auto minmax(0,1fr);gap:14px;align-items:start}
+.step-n{width:36px;height:36px;border-radius:50%;background:var(--wine);color:var(--cream);display:grid;place-items:center;font-family:var(--display);font-size:18px;font-weight:600}
+.steps p{margin:6px 0 0}
+.steps a{color:var(--ink);font-weight:600}
+.pay{border-top:1px solid var(--line);padding:clamp(22px,3vw,30px) clamp(18px,3vw,32px);display:grid;grid-template-columns:minmax(0,3fr) minmax(0,2fr);gap:22px 28px}
+.pay h3{margin:0 0 12px;font-size:15px;font-weight:600}
+.pay p{margin:0;color:var(--muted)}
+.pay-list{list-style:none;margin:0;padding:0;gap:8px}
+.pay-chip{display:inline-flex;align-items:center;height:36px;padding:0 14px;border-radius:var(--r-pill);box-shadow:inset 0 0 0 1px var(--line-hi);font-size:14px;font-weight:600}
+
+/* "Nuevo": a small static label on the photo for perfumes that came in during the last 15 days */
+.new{position:absolute;z-index:2;padding:3px 9px;border-radius:var(--r-pill);background:var(--wine);color:var(--cream);box-shadow:inset 0 0 0 1px rgb(243 217 180 / 0.45);
+  font-size:11px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;line-height:1.4;pointer-events:none}
+.card > .new{top:22px;left:22px}
+.fitem{position:relative}
+.fitem > .new{top:4px;left:50%;transform:translateX(-50%);background:var(--bg)}
+
 /* motion: one easing, 200–600 ms, only transform and opacity.
    Scroll reveals only hide things once the script has added .js-anim to <html>,
    so if JS fails or motion is reduced everything is simply visible. */
@@ -287,6 +327,9 @@ footer{padding-block:24px 104px}
 .topbar{animation:drop-in 400ms var(--ease-out) both}
 .brand-logo{animation:settle 600ms var(--ease-out) both}
 .intro{animation:rise 500ms var(--ease-out) 150ms both}
+.intro-link{animation:rise 500ms var(--ease-out) 250ms both}
+/* quiz: each question (and the result) rises in once when it replaces the previous one */
+.quiz-step{animation:rise 300ms var(--ease-out)}
 
 /* scroll reveals: sections, carousel bottles and footer blocks (--d is a per-element delay) */
 .js-anim [data-reveal]{opacity:0;transform:translateY(16px)}
@@ -304,7 +347,7 @@ footer{padding-block:24px 104px}
 /* filter panel: its blocks follow the panel in, 40 ms apart */
 .fp > *{opacity:0;transform:translateY(6px);transition:opacity 150ms ease,transform 150ms ease}
 .panel-wrap[data-open="true"] .fp > *{opacity:1;transform:none;transition:opacity 300ms var(--ease-out) calc(var(--k,0) * 40ms + 60ms),transform 300ms var(--ease-out) calc(var(--k,0) * 40ms + 60ms)}
-.fp > :nth-child(2){--k:1} .fp > :nth-child(3){--k:2} .fp > :nth-child(4){--k:3} .fp > :nth-child(5){--k:4}
+.fp > :nth-child(2){--k:1} .fp > :nth-child(3){--k:2} .fp > :nth-child(4){--k:3} .fp > :nth-child(5){--k:4} .fp > :nth-child(6){--k:5}
 .badge{animation:pop 200ms var(--ease-out)}
 .badge.out{animation:pop-out 160ms ease-in forwards}
 
@@ -373,6 +416,9 @@ footer{padding-block:24px 104px}
   .map,.map iframe{min-height:280px}
   .where-info{padding:8px 8px 10px}
   .where-info .btn{justify-self:stretch;justify-content:center}
+  .steps,.pay{grid-template-columns:minmax(0,1fr)}
+  .card > .new{top:14px;left:14px}
+  .quiz-res .grid{grid-template-columns:repeat(2,minmax(0,1fr))}
 }
 /* very narrow phones (320–340 px): the top strip tightens so it still fits on one line */
 @media (max-width:340px){
@@ -392,6 +438,7 @@ if(!matchMedia("(prefers-reduced-motion: reduce)").matches){
 <div class="topbar">
   <div class="wrap topbar-in">
     <nav class="topnav" aria-label="Secciones">
+      <a class="nav-buy" href="#comprar"><span>Cómo comprar</span></a>
       <a href="#ubicacion"><span>Ubicación</span></a>
       <a href="#preguntas"><span class="long">Preguntas frecuentes</span><span class="short">Preguntas</span></a>
       <a href="#originales"><span>¿Son originales?</span></a>
@@ -403,7 +450,8 @@ if(!matchMedia("(prefers-reduced-motion: reduce)").matches){
 <header id="top">
   <div class="wrap hero-in">
     <h1 class="brand"><span class="sr">Griyata Parfums</span><span class="brand-logo" aria-hidden="true"><span class="shine"></span></span></h1>
-    <p class="intro">Perfumes árabes originales. Elegí el tuyo y pedilo por WhatsApp. Retiro en Malabrigo o envío dentro de la ciudad.</p>
+    <p class="intro">Perfumes árabes originales. Elegí el tuyo y pedilo por WhatsApp. Retiro en Malabrigo o envío sin costo a Malabrigo y Reconquista.</p>
+    <a class="intro-link" href="#comprar">Cómo comprar →</a>
     <hr class="hero-rule">
   </div>
 </header>
@@ -414,6 +462,14 @@ if(!matchMedia("(prefers-reduced-motion: reduce)").matches){
     <p>Nuestra edición especial: perfumes con carácter, para los que quieren dejar huella donde pasan.</p>
   </div>
   <div class="feat-strip"><div class="feat-track" id="featTrack" role="region" aria-roledescription="carrusel" aria-label="Edición especial" tabindex="0"></div><span class="buy-band" aria-hidden="true"></span></div>
+</section>
+
+<section class="quiz wrap" id="aroma" aria-labelledby="quiz-title">
+  <div class="quiz-box" data-reveal>
+    <h2 id="quiz-title">Encontrá tu aroma</h2>
+    <p>Respondé 3 preguntas y te recomendamos perfumes que tenemos en stock.</p>
+    <div id="quizBody"><button class="btn primary" id="quizStart" type="button">Empezar</button></div>
+  </div>
 </section>
 
 <div class="controls" id="controls">
@@ -430,6 +486,7 @@ if(!matchMedia("(prefers-reduced-motion: reduce)").matches){
   <div class="panel-wrap" id="filtPanel" data-open="false" role="region" aria-label="Filtros">
     <div class="wrap"><div class="fp">
       <div class="fp-line"><h2>Línea</h2><div class="seg" id="seg2" role="group" aria-label="Línea"></div></div>
+      <div id="famBlock"><h2>Aroma</h2><div class="chips" id="fams"></div></div>
       <div><h2>Marca</h2><div class="chips" id="brands"></div></div>
       <div>
         <div class="range-head"><h2><label for="maxPrice">Precio de contado</label></h2><output id="maxOut" for="maxPrice" class="num"></output></div>
@@ -454,6 +511,23 @@ if(!matchMedia("(prefers-reduced-motion: reduce)").matches){
   </div>
   <button class="zoom-close" id="zClose" type="button" aria-label="Cerrar"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
 </dialog>
+
+<section class="how wrap" id="comprar" aria-labelledby="how-title">
+  <h2 id="how-title" data-reveal>Cómo comprar</h2>
+  <div class="how-box" data-reveal style="--d:100ms">
+    <ol class="steps">
+      <li><span class="step-n num" aria-hidden="true">1</span><p>Elegís tu perfume.</p></li>
+      <li><span class="step-n num" aria-hidden="true">2</span><p>Escribís por <a href="https://wa.me/543482664743" target="_blank" rel="noopener">WhatsApp</a>.</p></li>
+      <li><span class="step-n num" aria-hidden="true">3</span><p>Retirás en <a href="#ubicacion">Troya Tech</a> o te lo llevamos dentro de Malabrigo y a Reconquista sin costo.</p></li>
+    </ol>
+    <div class="pay">
+      <div><h3>Formas de pago</h3><ul class="chips pay-list" role="list">
+        <li class="pay-chip">Efectivo</li><li class="pay-chip">Transferencia</li><li class="pay-chip">Mercado Pago</li><li class="pay-chip">Tarjetas de crédito y débito</li>
+      </ul></div>
+      <div><h3>Cuotas</h3><p>3 cuotas sin interés con tarjetas de crédito.</p></div>
+    </div>
+  </div>
+</section>
 
 <section class="orig wrap" id="originales" aria-labelledby="orig-title">
   <h2 id="orig-title" data-reveal>¿Cómo saber si son originales?</h2>
@@ -511,7 +585,7 @@ if(!matchMedia("(prefers-reduced-motion: reduce)").matches){
           <dt>Sábados</dt><dd>8:30 a 12:00</dd>
         </dl>
       </div></div>
-      <p style="margin:0;color:var(--muted)">Retirá tu perfume en el local o pedí envío dentro de Malabrigo.</p>
+      <p style="margin:0;color:var(--muted)">Retirá tu perfume en el local o pedí envío sin costo a Malabrigo y Reconquista.</p>
       <a class="btn primary" href="https://maps.app.goo.gl/3S5uZdS9C4zbUjkX9" target="_blank" rel="noopener"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a7 7 0 0 0-7 7c0 5.2 7 13 7 13s7-7.8 7-13a7 7 0 0 0-7-7Zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5Z"/></svg>Cómo llegar</a>
     </div>
   </div>
@@ -551,6 +625,8 @@ if(!matchMedia("(prefers-reduced-motion: reduce)").matches){
 
 <a class="fab" id="fab" href="https://wa.me/543482664743" target="_blank" rel="noopener" aria-label="Escribinos por WhatsApp"><svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2Zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.2-.4.2-.4.7-1.3.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.7 11.8 11.8 0 0 0 4.5 4c1.7.7 2.3.8 3.2.6.5-.1 1.5-.6 1.7-1.2.2-.6.2-1.1.2-1.2l-.5-.3Z"/></svg></a>
 
+<!-- visitas: GoatCounter, sin cookies ni datos personales. Para no contar tus visitas: abrí la página con #toggle-goatcounter al final -->
+<script data-goatcounter="https://griyata.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>
 <script>
 const DATA = __DATA__;
 const IMGS = __IMGS__;
@@ -588,6 +664,18 @@ $("brands").addEventListener("click", e=>{
   c.setAttribute("aria-pressed", brands.has(b)); render();
 });
 
+// aroma: the families come from the Fotos sheet (column Familia); a perfume shows if it has any chosen family
+let fams = new Set();
+const famOf = p => p.fam || [];
+const FAMS = [...new Set(DATA.flatMap(famOf))].sort((a,b)=>DATA.filter(p=>famOf(p).includes(b)).length - DATA.filter(p=>famOf(p).includes(a)).length || a.localeCompare(b,"es"));
+$("fams").innerHTML = FAMS.map(f=>`<button class="chip" type="button" data-f="${esc(f)}" aria-pressed="false">${esc(f)}<span class="num">${DATA.filter(p=>famOf(p).includes(f)).length}</span></button>`).join("");
+if(!FAMS.length) $("famBlock").hidden = true;
+$("fams").addEventListener("click", e=>{
+  const c = e.target.closest(".chip"); if(!c) return;
+  const f = c.dataset.f; fams.has(f) ? fams.delete(f) : fams.add(f);
+  c.setAttribute("aria-pressed", fams.has(f)); render();
+});
+
 // precio
 const range = $("maxPrice");
 range.min = PMIN; range.max = PMAX; range.value = PMAX;
@@ -615,7 +703,7 @@ $("done").addEventListener("click", ()=>{ setPanel(false); $("list").scrollIntoV
 document.addEventListener("pointerdown", e=>{ if(panel.dataset.open==="true" && !e.target.closest("#controls")) setPanel(false); });
 document.addEventListener("keydown", e=>{ if(e.key==="Escape" && panel.dataset.open==="true"){ setPanel(false); fbtn.focus(); } });
 function clearFilters(){
-  brands.clear(); document.querySelectorAll("#brands .chip").forEach(c=>c.setAttribute("aria-pressed","false"));
+  brands.clear(); fams.clear(); document.querySelectorAll("#brands .chip,#fams .chip").forEach(c=>c.setAttribute("aria-pressed","false"));
   maxPrice = PMAX; range.value = PMAX; showMax();
   sortBy = "rec"; $("sort").querySelectorAll("button").forEach(x=>x.setAttribute("aria-pressed", x.dataset.k==="rec"));
   line = "Todos"; syncLine(); $("q").value = ""; render();
@@ -645,15 +733,20 @@ const priceHtml = p => `<div class="price num"><b>${fmt(p.c)}</b><small>contado<
 const wellHtml = p => IMGS[p.i]
   ? `<button class="well" type="button" data-i="${p.i}" aria-label="Ver ${esc(p.n)} más grande"><img src="${IMGS[p.i]}" alt="Frasco de ${esc(p.n)}" loading="lazy"></button>`
   : `<div class="well no-photo">Foto próximamente</div>`;
+// "Nuevo": the Fecha de ingreso is 15 days old or less, counted on the visitor's own date, so the label goes away
+// on time even if the page is not rebuilt. An empty or future date shows nothing.
+const DAY = 864e5, today = new Date(); today.setHours(0,0,0,0);
+const isNew = p => { if(!p.ing) return false; const [y,m,d] = p.ing.split("-").map(Number), age = (today - new Date(y, m-1, d)) / DAY; return age >= 0 && age <= 15; };
+const newHtml = p => isNew(p) ? `<span class="new">Nuevo</span>` : "";
 function cardHtml(p){
   return `<article class="card">
-    ${wellHtml(p)}
+    ${newHtml(p)}${wellHtml(p)}
     ${p.b?`<p class="brand-line">${esc(p.b)}</p>`:""}
-    <h3>${esc(p.n)}</h3>
+    <h3>${esc(p.n)}${isNew(p) ? `<span class="sr"> (nuevo)</span>` : ""}</h3>
     <p class="notes">${esc((p.notes||"").split("·").map(x=>x.trim()).join(", "))}</p>
     <div class="foot">
       ${priceHtml(p)}
-      <a class="wa" href="${waHref(p)}" target="_blank" rel="noopener" aria-label="Pedir ${esc(p.n)} por WhatsApp">${WA_ICON}<span class="wa-long">Pedir por WhatsApp</span><span class="wa-short">Pedir</span></a>
+      <a class="wa" href="${waHref(p)}" target="_blank" rel="noopener" data-n="${esc(p.n)}" aria-label="Pedir ${esc(p.n)} por WhatsApp">${WA_ICON}<span class="wa-long">Pedir por WhatsApp</span><span class="wa-short">Pedir</span></a>
     </div>
   </article>`;
 }
@@ -669,11 +762,11 @@ const featHtml = (p, k, copy) => {
   // only the first bottles of the main copy rise in one after another; everything else is simply visible
   const reveal = main && k < 6 ? ` data-reveal style="--d:${k*70}ms"` : "";
   return `<article class="fitem"${reveal}${main ? "" : ' aria-hidden="true"'}>
-    ${wellHtml(p).replace('<button class="well"', `<button class="well"${skip}`)}
+    ${newHtml(p)}${wellHtml(p).replace('<button class="well"', `<button class="well"${skip}`)}
     <p class="brand-line">${esc(p.b||"")}</p>
     <h3>${esc(p.n)}</h3>
     <div class="fprice">${priceHtml(p)}</div>
-    <a class="fbuy" href="${waHref(p)}" target="_blank" rel="noopener" aria-label="Comprar ${esc(p.n)} por WhatsApp"${skip}>${WA_ICON}<span>Comprar</span></a>
+    <a class="fbuy" href="${waHref(p)}" target="_blank" rel="noopener" data-n="${esc(p.n)}" aria-label="Comprar ${esc(p.n)} por WhatsApp${isNew(p) ? " (nuevo)" : ""}"${skip}>${WA_ICON}<span>Comprar</span></a>
   </article>`;
 };
 track.innerHTML = [0,1,2].map(copy=>FEAT.map((p,k)=>featHtml(p,k,copy)).join("")).join("");
@@ -779,8 +872,9 @@ function render(){
   SECTIONS.forEach(s=>{
     if(line !== "Todos" && line !== s) return;
     let items = DATA.filter(p=>p.s===s
-      && (!q || norm(p.n+" "+(p.b||"")+" "+(p.notes||"")).includes(q))
+      && (!q || norm(p.n+" "+(p.b||"")+" "+(p.notes||"")+" "+famOf(p).join(" ")).includes(q))
       && (!brands.size || brands.has(p.b))
+      && (!fams.size || famOf(p).some(f=>fams.has(f)))
       && p.c <= maxPrice);
     if(SORTERS[sortBy]) items = items.slice().sort(SORTERS[sortBy]);
     if(!items.length) return;
@@ -789,7 +883,7 @@ function render(){
   });
   $("list").innerHTML = html || `<div class="empty"><p>No hay perfumes con esos filtros.</p><button class="btn" type="button" onclick="clearFilters()">Limpiar filtros</button></div>`;
   $("resCount").textContent = total === 1 ? "1 perfume" : total + " perfumes";
-  const active = brands.size + (maxPrice < PMAX ? 1 : 0) + (sortBy !== "rec" ? 1 : 0);
+  const active = brands.size + fams.size + (maxPrice < PMAX ? 1 : 0) + (sortBy !== "rec" ? 1 : 0);
   setBadge(active);
   animateCards();
 }
@@ -802,7 +896,7 @@ function openZoom(i){
   $("zName").textContent = p.n;
   $("zNotes").textContent = (p.notes||"").split("·").map(x=>x.trim()).join(", ");
   $("zPrice").innerHTML = priceHtml(p);
-  $("zWa").href = waHref(p); $("zWa").innerHTML = WA_ICON + "Pedir por WhatsApp";
+  $("zWa").href = waHref(p); $("zWa").innerHTML = WA_ICON + "Pedir por WhatsApp"; $("zWa").dataset.n = p.n;
   zoom.classList.remove("closing");
   zoom.showModal();
 }
@@ -812,7 +906,7 @@ function closeZoom(){
   zoom.classList.add("closing");
   setTimeout(()=>{ zoom.close(); zoom.classList.remove("closing"); }, 150);
 }
-[$("list"), track].forEach(el=>el.addEventListener("click", e=>{ const w = e.target.closest(".well[data-i]"); if(w) openZoom(+w.dataset.i); }));
+[$("list"), track, $("quizBody")].forEach(el=>el.addEventListener("click", e=>{ const w = e.target.closest(".well[data-i]"); if(w) openZoom(+w.dataset.i); }));
 $("zClose").addEventListener("click", closeZoom);
 $("zImgWrap").addEventListener("click", closeZoom);
 zoom.addEventListener("click", e=>{ if(e.target === zoom) closeZoom(); });
@@ -852,13 +946,83 @@ function fabWatch(){
     fabSync();
   }, {rootMargin:`${-y}px ${-(innerWidth - x - s)}px ${-(innerHeight - y - s)}px ${-x}px`});
   // the search bar sits between the carousel and the catalogue: watching it too keeps that stretch one single fade
-  document.querySelectorAll("#list, #controls, .buy-band").forEach(el=>fabIO.observe(el));
+  document.querySelectorAll("#list, #controls, .buy-band, #quizBody").forEach(el=>fabIO.observe(el));
 }
 fabWatch();
 new MutationObserver(fabSync).observe(panel, {attributeFilter:["data-open"]});
 new MutationObserver(fabSync).observe(zoom, {attributeFilter:["open"]});
 let fabRT = 0;
 addEventListener("resize", ()=>{ clearTimeout(fabRT); fabRT = setTimeout(fabWatch, 150); });
+
+// encontrá tu aroma: three questions, then the 2–3 perfumes in stock that match best.
+// Score: the chosen aroma as main family 2, as second family 1; the exact line adds 1. Budget is a hard limit,
+// relaxed (and said so) only if fewer than 2 perfumes are left. Budget steps come from today's prices.
+const prices = DATA.map(p=>p.c).sort((a,b)=>a-b), cut = q => Math.ceil(prices[Math.floor((prices.length-1)*q)]/5000)*5000;
+const BUDGET = [...new Set([cut(1/3), cut(2/3)])].filter(v=>v < PMAX).map(v=>[`Hasta ${fmt(v)}`, v]).concat([["No importa", Infinity]]);
+const AROMAS = [["Dulce y cálido",["Dulces"]],["Fresco y limpio",["Frescos","Cítricos"]],["Frutal",["Frutales"]],["Floral",["Florales"]],["Intenso: madera y especias",["Amaderados","Especiados"]]]
+  .filter(([,f])=>f.some(x=>FAMS.includes(x)));
+const QUIZ = [
+  // Mujer and Hombre also bring Unisex, but their own line scores 1 more; Unisex brings only Unisex
+  ["¿Para quién es?", [["Mujer",{lines:["MUJER","UNISEX"],pref:"MUJER"}],["Hombre",{lines:["HOMBRE","UNISEX"],pref:"HOMBRE"}],["Unisex",{lines:["UNISEX"],pref:"UNISEX"}]]],
+  ["¿Qué aroma te gusta más?", AROMAS],
+  ["¿Cuánto querés gastar? (precio de contado)", BUDGET]
+];
+let qStep = -1, qAns = [];
+function recommend([who, fam, max]){
+  const score = p => { const f = famOf(p); const s = fam.includes(f[0]) ? 2 : f.some(x=>fam.includes(x)) ? 1 : 0; return s && p.s === who.pref ? s + 1 : s; };
+  const rank = list => list.map(p=>[p,score(p)]).filter(([,s])=>s>0)
+    .sort((x,y)=>y[1]-x[1] || !!IMGS[y[0].i] - !!IMGS[x[0].i] || x[0].c - y[0].c).map(([p])=>p);
+  const pool = DATA.filter(p=>!who.lines || who.lines.includes(p.s));
+  let res = rank(pool.filter(p=>p.c <= max)), note = "";
+  if(res.length < 2 && max < Infinity){
+    const all = rank(pool);
+    if(all.length > res.length){ res = all; note = "No encontramos suficientes en ese precio: te mostramos los más parecidos."; }
+  }
+  return {res: res.slice(0,3), note};
+}
+function renderQuiz(){
+  const body = $("quizBody");
+  if(qStep < 0){ body.innerHTML = `<button class="btn primary" id="quizStart" type="button">Empezar</button>`; return; }
+  if(qStep < QUIZ.length){
+    const [q, opts] = QUIZ[qStep];
+    body.innerHTML = `<div class="quiz-step"><p class="quiz-prog num">Pregunta ${qStep+1} de ${QUIZ.length}</p><h3 tabindex="-1">${q}</h3>
+      <div class="chips">${opts.map(([l],k)=>`<button class="chip" type="button" data-o="${k}">${esc(l)}</button>`).join("")}</div>
+      ${qStep ? `<div class="quiz-nav"><button class="btn" type="button" data-q="back">Atrás</button></div>` : ""}</div>`;
+  } else {
+    const {res, note} = recommend(qAns);
+    body.innerHTML = `<div class="quiz-step"><h3 tabindex="-1">${res.length ? "Te recomendamos" : "No encontramos perfumes para esa combinación"}</h3>
+      ${note ? `<p class="quiz-note">${note}</p>` : ""}
+      ${res.length ? `<div class="quiz-res"><div class="grid">${res.map(p=>cardHtml(p).replace('<article class="card"','<article class="card in"')).join("")}</div></div>`
+                   : `<p class="quiz-note">Probá con otra respuesta o mirá todo el catálogo.</p>`}
+      <div class="quiz-nav"><button class="btn" type="button" data-q="again">Empezar de nuevo</button><a class="btn" href="#list">Ver todo el catálogo</a></div></div>`;
+  }
+  body.querySelector("h3")?.focus({preventScroll:true});
+}
+$("quizBody").addEventListener("click", e=>{
+  const b = e.target.closest("button"); if(!b) return;
+  if(b.id === "quizStart"){ qStep = 0; qAns = []; }
+  else if(b.dataset.o){ qAns[qStep] = QUIZ[qStep][1][+b.dataset.o][1]; qStep++; }
+  else if(b.dataset.q === "back") qStep--;
+  else if(b.dataset.q === "again"){ qStep = 0; qAns = []; }
+  else return;
+  renderQuiz();
+});
+if(!AROMAS.length) $("aroma").hidden = true;
+
+// "Cómo comprar" in the top strip: CSS hides it under 420 px; this also drops it whenever the strip would not fit on one line
+const navBuy = document.querySelector(".nav-buy"), topIn = document.querySelector(".topbar-in");
+const fitNav = () => { navBuy.hidden = false; navBuy.hidden = topIn.scrollWidth > topIn.clientWidth + 1; };
+new ResizeObserver(fitNav).observe(topIn);
+document.fonts && document.fonts.ready.then(fitNav);
+
+// visitas (GoatCounter, no cookies): each tap on a buy button is an event named after where it was and the perfume
+document.addEventListener("click", e=>{
+  const a = e.target.closest("a.wa, a.fbuy, #fab");
+  if(!a || !window.goatcounter || !window.goatcounter.count) return;
+  const where = a.id === "fab" ? "whatsapp-flotante" : a.classList.contains("fbuy") ? "carrusel"
+    : a.id === "zWa" ? "ficha" : a.closest("#aroma") ? "cuestionario" : "catalogo";
+  window.goatcounter.count({path: a.dataset.n ? `${where}: ${a.dataset.n}` : where, title: a.dataset.n || "Botón flotante de WhatsApp", event: true});
+});
 
 render();
 window.griyataReady = true;

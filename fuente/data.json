@@ -7,6 +7,11 @@
   "notes": "Frambuesa · Rosa · Ámbar",
   "b": "Afnan",
   "img": "https://fimgs.net/mdimg/perfume-thumbs/dark-375x500.78544.avif",
+  "fam": [
+   "Frutales",
+   "Florales"
+  ],
+  "ing": "",
   "foto": "78544.avif"
  },
  {
@@ -17,6 +22,11 @@
   "notes": "Bergamota · Azahar · Vainilla",
   "b": "Lattafa",
   "img": "https://fimgs.net/mdimg/perfume-thumbs/dark-375x500.123646.avif",
+  "fam": [
+   "Florales",
+   "Dulces"
+  ],
+  "ing": "",
   "foto": "123646.avif"
  },
  {
@@ -27,6 +37,11 @@
   "notes": "Lichi · Iris · Praliné",
   "b": "Armaf",
   "img": "https://fimgs.net/mdimg/perfume-thumbs/dark-375x500.106168.2x.avif",
+  "fam": [
+   "Dulces",
+   "Florales"
+  ],
+  "ing": "2026-10-29",
   "foto": "b5664e408ed3.avif"
  },
  {
@@ -37,6 +52,11 @@
   "notes": "Granada · Jazmín · Praliné",
   "b": "Rasasi",
   "img": "https://fimgs.net/mdimg/perfume-thumbs/dark-375x500.67146.avif",
+  "fam": [
+   "Frutales",
+   "Dulces"
+  ],
+  "ing": "",
   "foto": "67146.avif"
  },
  {
@@ -47,6 +67,11 @@
   "notes": "Canela · Tuberosa · Vainilla",
   "b": "Lattafa",
   "img": "https://fimgs.net/mdimg/perfume-thumbs/dark-375x500.96864.avif",
+  "fam": [
+   "Dulces",
+   "Especiados"
+  ],
+  "ing": "",
   "foto": "96864.avif"
  },
  {
@@ -57,6 +82,11 @@
   "notes": "Azahar · Tuberosa · Vainilla",
   "b": "Maison Alhambra",
   "img": "https://fimgs.net/mdimg/perfume-thumbs/dark-375x500.89028.avif",
+  "fam": [
+   "Florales",
+   "Dulces"
+  ],
+  "ing": "",
   "foto": "89028.avif"
  },
  {
@@ -67,6 +97,11 @@
   "notes": "Leche de rosas · Merengue · Vainilla",
   "b": "Lattafa",
   "img": "https://fimgs.net/mdimg/perfume-thumbs/dark-375x500.98937.avif",
+  "fam": [
+   "Dulces",
+   "Florales"
+  ],
+  "ing": "",
   "foto": "98937.avif"
  },
  {
@@ -77,6 +112,11 @@
   "notes": "Cereza · Jazmín · Café",
   "b": "Maison Alhambra",
   "img": "https://fimgs.net/mdimg/perfume-thumbs/dark-375x500.117350.avif",
+  "fam": [
+   "Dulces",
+   "Frutales"
+  ],
+  "ing": "",
   "foto": "117350.avif"
  },
  {
@@ -87,6 +127,11 @@
   "notes": "Bergamota · Frambuesa · Marshmallow",
   "b": "Maison Alhambra",
   "img": "https://fimgs.net/mdimg/perfume-thumbs/dark-375x500.89732.avif",
+  "fam": [
+   "Dulces",
+   "Frutales"
+  ],
+  "ing": "",
   "foto": "89732.avif"
  },
  {
@@ -97,6 +142,11 @@
   "notes": "Manzana · Ciruela · Vainilla",
   "b": "Lattafa",
   "img": "https://fimgs.net/mdimg/perfume-thumbs/dark-375x500.83309.avif",
+  "fam": [
+   "Frutales",
+   "Dulces"
+  ],
+  "ing": "",
   "foto": "83309.avif"
  },
  {
@@ -107,6 +157,11 @@
   "notes": "Orquídea · Frutas tropicales · Vainilla",
   "b": "Lattafa",
   "img": "https://fimgs.net/mdimg/perfume-thumbs/dark-375x500.76880.avif",
+  "fam": [
+   "Dulces",
+   "Frutales"
+  ],
+  "ing": "",
   "foto": "76880.avif"
  },
  {
@@ -117,6 +172,11 @@
   "notes": "Durazno · Caramelo · Sándalo",
   "b": "Lattafa",
   "img": "https://fimgs.net/mdimg/perfume-thumbs/dark-375x500.80722.avif",
+  "fam": [
+   "Dulces",
+   "Frutales"
+  ],
+  "ing": "",
   "foto": "80722.avif"
  },
  {
@@ -127,6 +187,11 @@
   "notes": "Grosella negra · Caramelo de frutilla · Vainilla",
   "b": "Lattafa",
   "img": "https://fimgs.net/mdimg/perfume-thumbs/dark-375x500.95752.2x.avif",
+  "fam": [
+   "Dulces",
+   "Frutales"
+  ],
+  "ing": "2026-10-29",
   "foto": "eca73ed138bd.avif"
  },
  {
@@ -137,6 +202,11 @@
   "notes": "Frutilla · Jazmín · Caramelo",
   "b": "Lattafa",
   "img": "https://fimgs.net/mdimg/perfume-thumbs/dark-375x500.117615.avif",
+  "fam": [
+   "Dulces",
+   "Frutales"
+  ],
+  "ing": "",
   "foto": "117615.avif"
  },
  {
@@ -147,6 +217,11 @@
   "notes": "Mango · Coco · Vainilla",
   "b": "Lattafa",
   "img": "https://fimgs.net/mdimg/perfume-thumbs/dark-375x500.83320.2x.avif",
+  "fam": [
+   "Frutales",
+   "Dulces"
+  ],
+  "ing": "2026-10-29",
   "foto": "d0e27f2d99eb.avif"
  },
  {
@@ -157,6 +232,11 @@
   "notes": "Limón · Incienso · Pachulí",
   "b": "Afnan",
   "img": "https://fimgs.net/mdimg/perfume-thumbs/dark-375x500.78611.avif",
+  "fam": [
+   "Cítricos",
+   "Frescos"
+  ],
+  "ing": "",
   "foto": "78611.avif"
  },
  {
@@ -167,6 +247,11 @@
   "notes": "Pimienta rosa · Rosa · Oud",
   "b": "Lattafa",
   "img": "https://fimgs.net/mdimg/perfume-thumbs/dark-375x500.68214.avif",
+  "fam": [
+   "Florales",
+   "Amaderados"
+  ],
+  "ing": "",
   "foto": "68214.avif"
  },
  {
@@ -177,6 +262,11 @@
   "notes": "Bergamota · Melón · Vainilla",
   "b": "Al Haramain",
   "img": "https://fimgs.net/mdimg/perfume-thumbs/dark-375x500.51816.avif",
+  "fam": [
+   "Frutales",
+   "Dulces"
+  ],
+  "ing": "",
   "foto": "51816.avif"
  },
  {
@@ -187,6 +277,11 @@
   "notes": "Cardamomo · Praliné · Café",
   "b": "Lattafa",
   "img": "https://fimgs.net/mdimg/perfume-thumbs/dark-375x500.88175.avif",
+  "fam": [
+   "Especiados",
+   "Dulces"
+  ],
+  "ing": "",
   "foto": "88175.avif"
  },
  {
@@ -197,6 +292,11 @@
   "notes": "Canela · Dátiles · Vainilla",
   "b": "Lattafa",
   "img": "https://fimgs.net/mdimg/perfume-thumbs/dark-375x500.75805.avif",
+  "fam": [
+   "Especiados",
+   "Dulces"
+  ],
+  "ing": "",
   "foto": "75805.avif"
  },
  {
@@ -207,6 +307,11 @@
   "notes": "Mandarina · Caramelo · Vetiver",
   "b": "Armaf",
   "img": "https://fimgs.net/mdimg/perfume-thumbs/dark-375x500.83132.avif",
+  "fam": [
+   "Cítricos",
+   "Dulces"
+  ],
+  "ing": "",
   "foto": "83132.avif"
  },
  {
@@ -217,6 +322,11 @@
   "notes": "Mango · Jazmín · Ámbar gris",
   "b": "Lattafa",
   "img": "https://fimgs.net/mdimg/perfume-thumbs/dark-375x500.105609.2x.avif",
+  "fam": [
+   "Frutales",
+   "Cítricos"
+  ],
+  "ing": "2026-10-29",
   "foto": "20b783ab0aa9.avif"
  },
  {
@@ -227,6 +337,11 @@
   "notes": "Azafrán · Oud · Almizcle",
   "b": "Lattafa",
   "img": "https://fimgs.net/mdimg/perfume-thumbs/dark-375x500.64948.avif",
+  "fam": [
+   "Amaderados",
+   "Especiados"
+  ],
+  "ing": "",
   "foto": "64948.avif"
  },
  {
@@ -237,6 +352,11 @@
   "notes": "Naranja · Frutas · Vainilla",
   "b": "Maison Alhambra",
   "img": "https://fimgs.net/mdimg/perfume-thumbs/dark-375x500.95874.avif",
+  "fam": [
+   "Cítricos",
+   "Dulces"
+  ],
+  "ing": "",
   "foto": "95874.avif"
  },
  {
@@ -247,6 +367,11 @@
   "notes": "Ananá · Jazmín · Oud",
   "b": "Lattafa",
   "img": "https://fimgs.net/mdimg/perfume-thumbs/dark-375x500.67996.avif",
+  "fam": [
+   "Frutales",
+   "Amaderados"
+  ],
+  "ing": "",
   "foto": "67996.avif"
  },
  {
@@ -257,6 +382,11 @@
   "notes": "Coco · Jazmín · Vainilla",
   "b": "Lattafa",
   "img": "https://fimgs.net/mdimg/perfume-thumbs/dark-375x500.82590.avif",
+  "fam": [
+   "Dulces",
+   "Florales"
+  ],
+  "ing": "",
   "foto": "82590.avif"
  },
  {
@@ -267,6 +397,11 @@
   "notes": "Manzana · Azahar · Vainilla",
   "b": "Afnan",
   "img": "https://fimgs.net/mdimg/perfume-thumbs/dark-375x500.65414.avif",
+  "fam": [
+   "Dulces",
+   "Frutales"
+  ],
+  "ing": "",
   "foto": "65414.avif"
  },
  {
@@ -277,6 +412,11 @@
   "notes": "Pitahaya · Toffee · Pachulí",
   "b": "Afnan",
   "img": "https://fimgs.net/mdimg/perfume-thumbs/dark-375x500.123313.avif",
+  "fam": [
+   "Dulces",
+   "Amaderados"
+  ],
+  "ing": "",
   "foto": "123313.avif"
  },
  {
@@ -287,6 +427,11 @@
   "notes": "Azafrán · Tabaco · Pachulí",
   "b": "Lattafa",
   "img": "https://fimgs.net/mdimg/perfume-thumbs/dark-375x500.117616.avif",
+  "fam": [
+   "Especiados",
+   "Amaderados"
+  ],
+  "ing": "",
   "foto": "117616.avif"
  },
  {
@@ -297,6 +442,10 @@
   "notes": "Sal marina · Iris · Ámbar gris",
   "b": "Lattafa",
   "img": "https://fimgs.net/mdimg/perfume-thumbs/dark-375x500.89765.2x.avif",
+  "fam": [
+   "Frescos"
+  ],
+  "ing": "2026-10-29",
   "foto": "16cb4e3e2786.avif"
  },
  {
@@ -307,6 +456,11 @@
   "notes": "Bergamota · Lavanda · Ambroxan",
   "b": "Armaf",
   "img": "https://fimgs.net/mdimg/perfume-thumbs/dark-375x500.77860.avif",
+  "fam": [
+   "Frescos",
+   "Cítricos"
+  ],
+  "ing": "",
   "foto": "77860.avif"
  },
  {
@@ -317,6 +471,11 @@
   "notes": "Manzana · Lavanda · Haba tonka",
   "b": "Lattafa",
   "img": "https://fimgs.net/mdimg/perfume-thumbs/dark-375x500.70465.avif",
+  "fam": [
+   "Frescos",
+   "Dulces"
+  ],
+  "ing": "",
   "foto": "70465.avif"
  },
  {
@@ -327,6 +486,11 @@
   "notes": "Manzana · Ciruela · Ámbar gris",
   "b": "Rasasi",
   "img": "https://fimgs.net/mdimg/perfume-thumbs/dark-375x500.46890.avif",
+  "fam": [
+   "Frescos",
+   "Frutales"
+  ],
+  "ing": "",
   "foto": "46890.avif"
  },
  {
@@ -337,6 +501,11 @@
   "notes": "Manzana · Cardamomo · Musgo",
   "b": "Rasasi",
   "img": "https://fimgs.net/mdimg/perfume-thumbs/dark-375x500.89050.avif",
+  "fam": [
+   "Frescos",
+   "Especiados"
+  ],
+  "ing": "",
   "foto": "89050.avif"
  },
  {
@@ -347,6 +516,11 @@
   "notes": "Agua de coco · Higo · Haba tonka",
   "b": "Rasasi",
   "img": "https://fimgs.net/mdimg/perfume-thumbs/dark-375x500.108054.avif",
+  "fam": [
+   "Frutales",
+   "Frescos"
+  ],
+  "ing": "",
   "foto": "108054.avif"
  },
  {
@@ -357,6 +531,10 @@
   "notes": "Nuez moscada · Cedro · Ámbar",
   "b": "Lattafa",
   "img": "https://fimgs.net/mdimg/perfume-thumbs/dark-375x500.75902.avif",
+  "fam": [
+   "Frescos"
+  ],
+  "ing": "",
   "foto": "75902.avif"
  },
  {
@@ -367,6 +545,11 @@
   "notes": "Ananá · Canela · Vainilla",
   "b": "Lattafa",
   "img": "https://fimgs.net/mdimg/perfume-thumbs/dark-375x500.84302.avif",
+  "fam": [
+   "Dulces",
+   "Especiados"
+  ],
+  "ing": "",
   "foto": "84302.avif"
  },
  {
@@ -377,6 +560,11 @@
   "notes": "Pomelo · Jengibre · Ambroxan",
   "b": "Maison Alhambra",
   "img": "https://fimgs.net/mdimg/perfume-thumbs/dark-375x500.83666.2x.avif",
+  "fam": [
+   "Cítricos",
+   "Frescos"
+  ],
+  "ing": "2026-10-29",
   "foto": "436650304fa1.avif"
  },
  {
@@ -387,6 +575,11 @@
   "notes": "Menta · Damasco · Higo",
   "b": "Maison Alhambra",
   "img": "https://fimgs.net/mdimg/perfume-thumbs/dark-375x500.103352.2x.avif",
+  "fam": [
+   "Frescos",
+   "Frutales"
+  ],
+  "ing": "2026-10-29",
   "foto": "75ebdc3d5316.avif"
  },
  {
@@ -397,6 +590,11 @@
   "notes": "Canela · Lavanda · Ámbar",
   "b": "Maison Alhambra",
   "img": "https://fimgs.net/mdimg/perfume-thumbs/dark-375x500.94166.avif",
+  "fam": [
+   "Frescos",
+   "Especiados"
+  ],
+  "ing": "",
   "foto": "94166.avif"
  },
  {
@@ -407,6 +605,11 @@
   "notes": "Lavanda · Tabaco · Haba tonka",
   "b": "Lattafa",
   "img": "https://fimgs.net/mdimg/perfume-thumbs/dark-375x500.97995.avif",
+  "fam": [
+   "Dulces",
+   "Amaderados"
+  ],
+  "ing": "",
   "foto": "97995.avif"
  }
 ]

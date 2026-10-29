@@ -41,13 +41,43 @@ def extension(url):
     return m.group(1).replace('jpeg', 'jpg') if m else 'jpg'
 
 
-# ---------- hoja Fotos: nombre → link, notas, marca ----------
+def familias(celda):
+    """'dulces, Frutales' → ['Dulces', 'Frutales']"""
+    vistas = []
+    for f in (celda or '').replace(';', ',').split(','):
+        f = f.strip()
+        f = f[:1].upper() + f[1:].lower()
+        if f and f not in vistas:
+            vistas.append(f)
+    return vistas
+
+
+def fecha(celda, nombre):
+    """dd/mm/aaaa (o aaaa-mm-dd) → aaaa-mm-dd; vacía o ilegible → ''"""
+    celda = (celda or '').strip()
+    if not celda:
+        return ''
+    m = re.fullmatch(r'(\d{1,2})[/-](\d{1,2})[/-](\d{2,4})', celda)
+    if m:
+        d, mes, a = (int(x) for x in m.groups())
+        a += 2000 if a < 100 else 0
+    else:
+        m = re.fullmatch(r'(\d{4})-(\d{1,2})-(\d{1,2})', celda)
+        if not m:
+            print('Fecha de ingreso ilegible para %s: %r (uso dd/mm/aaaa)' % (nombre, celda))
+            return ''
+        a, mes, d = (int(x) for x in m.groups())
+    return '%04d-%02d-%02d' % (a, mes, d)
+
+
+# ---------- hoja Fotos: nombre → link, notas, marca, familia, fecha de ingreso ----------
 fotos = {}
 for fila in leer_csv(CONFIG['fotos_csv'])[1:]:
-    fila += [''] * (4 - len(fila))
-    nombre, link, notas, marca = (x.strip() for x in fila[:4])
+    fila += [''] * (6 - len(fila))
+    nombre, link, notas, marca, familia, ingreso = (x.strip() for x in fila[:6])
     if nombre:
-        fotos[nombre.lower()] = {'link': link, 'notas': notas, 'marca': marca}
+        fotos[nombre.lower()] = {'link': link, 'notas': notas, 'marca': marca,
+                                 'familia': familias(familia), 'ingreso': fecha(ingreso, nombre)}
 
 # ---------- hoja Catálogo: líneas y perfumes disponibles ----------
 perfumes, linea = [], None
@@ -63,7 +93,8 @@ for fila in leer_csv(CONFIG['catalogo_csv']):
     extra = fotos.get(nombre.lower(), {})
     perfumes.append({'s': linea, 'n': nombre, 'c': contado, 't': tarjeta,
                      'notes': fila[4].strip() or extra.get('notas', ''),
-                     'b': extra.get('marca', ''), 'img': extra.get('link', '')})
+                     'b': extra.get('marca', ''), 'img': extra.get('link', ''),
+                     'fam': extra.get('familia', []), 'ing': extra.get('ingreso', '')})
 
 if len(perfumes) < 3:
     sys.exit('La planilla trajo %d perfumes; parece un error, no actualizo nada.' % len(perfumes))
