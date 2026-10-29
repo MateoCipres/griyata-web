@@ -289,7 +289,7 @@ footer{padding-block:24px 104px}
 .quiz-step .chips{justify-content:center}
 .quiz-nav{display:flex;flex-wrap:wrap;gap:12px;justify-content:center}
 .quiz-res{width:100%;text-align:left}
-.quiz-res .grid{grid-template-columns:repeat(auto-fit,minmax(min(210px,100%),1fr))}
+.quiz-res .grid{grid-template-columns:repeat(auto-fit,minmax(min(210px,100%),260px));justify-content:center}   /* 2 results keep the size of 3 */
 .quiz-note{margin:0;color:var(--muted);font-size:14px;text-wrap:balance}
 
 /* cómo comprar: three numbered steps, then how to pay, on one surface split by a hairline */
@@ -312,6 +312,16 @@ footer{padding-block:24px 104px}
 .card > .new{top:22px;left:22px}
 .fitem{position:relative}
 .fitem > .new{top:4px;left:50%;transform:translateX(-50%);background:var(--bg)}
+
+/* estación: line icons stacked at the photo's top right, main season first, across from "Nuevo" (top left).
+   Muted tones checked against the wine and the photo well (all above 5:1); a dark brown fell to 2.5:1 on the wine,
+   hence the toasted one for autumn */
+.seas{position:absolute;z-index:2;display:grid;gap:6px;pointer-events:none}
+.ses{display:grid;place-items:center;width:26px;height:26px;border-radius:50%;background:rgb(16 4 6 / 0.55);pointer-events:auto}
+.ses.e-primavera{color:#9fb88c} .ses.e-verano{color:#e2bb6e} .ses.e-otono{color:#c99a6e} .ses.e-invierno{color:#b8cdd9}
+.card > .seas{top:20px;right:20px}
+.fitem > .seas{top:4px;right:14px}
+.fitem > .seas .ses{background:rgb(16 4 6 / 0.35)}
 
 /* motion: one easing, 200–600 ms, only transform and opacity.
    Scroll reveals only hide things once the script has added .js-anim to <html>,
@@ -347,7 +357,7 @@ footer{padding-block:24px 104px}
 /* filter panel: its blocks follow the panel in, 40 ms apart */
 .fp > *{opacity:0;transform:translateY(6px);transition:opacity 150ms ease,transform 150ms ease}
 .panel-wrap[data-open="true"] .fp > *{opacity:1;transform:none;transition:opacity 300ms var(--ease-out) calc(var(--k,0) * 40ms + 60ms),transform 300ms var(--ease-out) calc(var(--k,0) * 40ms + 60ms)}
-.fp > :nth-child(2){--k:1} .fp > :nth-child(3){--k:2} .fp > :nth-child(4){--k:3} .fp > :nth-child(5){--k:4} .fp > :nth-child(6){--k:5}
+.fp > :nth-child(2){--k:1} .fp > :nth-child(3){--k:2} .fp > :nth-child(4){--k:3} .fp > :nth-child(5){--k:4} .fp > :nth-child(6){--k:5} .fp > :nth-child(7){--k:6}
 .badge{animation:pop 200ms var(--ease-out)}
 .badge.out{animation:pop-out 160ms ease-in forwards}
 
@@ -418,6 +428,7 @@ footer{padding-block:24px 104px}
   .where-info .btn{justify-self:stretch;justify-content:center}
   .steps,.pay{grid-template-columns:minmax(0,1fr)}
   .card > .new{top:14px;left:14px}
+  .card > .seas{top:12px;right:12px}
   .quiz-res .grid{grid-template-columns:repeat(2,minmax(0,1fr))}
 }
 /* very narrow phones (320–340 px): the top strip tightens so it still fits on one line */
@@ -467,7 +478,7 @@ if(!matchMedia("(prefers-reduced-motion: reduce)").matches){
 <section class="quiz wrap" id="aroma" aria-labelledby="quiz-title">
   <div class="quiz-box" data-reveal>
     <h2 id="quiz-title">Encontrá tu aroma</h2>
-    <p>Respondé 3 preguntas y te recomendamos perfumes que tenemos en stock.</p>
+    <p>Respondé 4 preguntas y te recomendamos perfumes que tenemos en stock.</p>
     <div id="quizBody"><button class="btn primary" id="quizStart" type="button">Empezar</button></div>
   </div>
 </section>
@@ -487,6 +498,7 @@ if(!matchMedia("(prefers-reduced-motion: reduce)").matches){
     <div class="wrap"><div class="fp">
       <div class="fp-line"><h2>Línea</h2><div class="seg" id="seg2" role="group" aria-label="Línea"></div></div>
       <div id="famBlock"><h2>Aroma</h2><div class="chips" id="fams"></div></div>
+      <div id="seasBlock"><h2>Estación</h2><div class="chips" id="seasF"></div></div>
       <div><h2>Marca</h2><div class="chips" id="brands"></div></div>
       <div>
         <div class="range-head"><h2><label for="maxPrice">Precio de contado</label></h2><output id="maxOut" for="maxPrice" class="num"></output></div>
@@ -676,6 +688,19 @@ $("fams").addEventListener("click", e=>{
   c.setAttribute("aria-pressed", fams.has(f)); render();
 });
 
+// estación: column Estación of the Fotos sheet (first one is the main season); chips in calendar order, a perfume
+// shows if it has any chosen season, main or second
+let seas = new Set();
+const seasOf = p => p.est || [];
+const SEASONS = ["Primavera","Verano","Otoño","Invierno"].filter(e=>DATA.some(p=>seasOf(p).includes(e)));
+$("seasF").innerHTML = SEASONS.map(e=>`<button class="chip" type="button" data-e="${e}" aria-pressed="false">${e}<span class="num">${DATA.filter(p=>seasOf(p).includes(e)).length}</span></button>`).join("");
+if(!SEASONS.length) $("seasBlock").hidden = true;
+$("seasF").addEventListener("click", e=>{
+  const c = e.target.closest(".chip"); if(!c) return;
+  const v = c.dataset.e; seas.has(v) ? seas.delete(v) : seas.add(v);
+  c.setAttribute("aria-pressed", seas.has(v)); render();
+});
+
 // precio
 const range = $("maxPrice");
 range.min = PMIN; range.max = PMAX; range.value = PMAX;
@@ -703,7 +728,7 @@ $("done").addEventListener("click", ()=>{ setPanel(false); $("list").scrollIntoV
 document.addEventListener("pointerdown", e=>{ if(panel.dataset.open==="true" && !e.target.closest("#controls")) setPanel(false); });
 document.addEventListener("keydown", e=>{ if(e.key==="Escape" && panel.dataset.open==="true"){ setPanel(false); fbtn.focus(); } });
 function clearFilters(){
-  brands.clear(); fams.clear(); document.querySelectorAll("#brands .chip,#fams .chip").forEach(c=>c.setAttribute("aria-pressed","false"));
+  brands.clear(); fams.clear(); seas.clear(); document.querySelectorAll("#brands .chip,#fams .chip,#seasF .chip").forEach(c=>c.setAttribute("aria-pressed","false"));
   maxPrice = PMAX; range.value = PMAX; showMax();
   sortBy = "rec"; $("sort").querySelectorAll("button").forEach(x=>x.setAttribute("aria-pressed", x.dataset.k==="rec"));
   line = "Todos"; syncLine(); $("q").value = ""; render();
@@ -738,9 +763,17 @@ const wellHtml = p => IMGS[p.i]
 const DAY = 864e5, today = new Date(); today.setHours(0,0,0,0);
 const isNew = p => { if(!p.ing) return false; const [y,m,d] = p.ing.split("-").map(Number), age = (today - new Date(y, m-1, d)) / DAY; return age >= 0 && age <= 15; };
 const newHtml = p => isNew(p) ? `<span class="new">Nuevo</span>` : "";
+// estación icons, drawn with the same 24-box, 2 px round stroke as the other icons
+const SEASON_ICON = {
+  Primavera: '<path d="M12 21v-9"/><path d="M12 14C12 10 9.5 7.5 5 7.5c0 4.5 2.5 6.5 7 6.5z"/><path d="M12 12c0-4 2.5-7 7-7 0 4.5-2.5 7-7 7z"/>',
+  Verano: '<circle cx="12" cy="12" r="4"/><path d="M12 2.5v2M12 19.5v2M2.5 12h2M19.5 12h2M5.3 5.3l1.4 1.4M17.3 17.3l1.4 1.4M5.3 18.7l1.4-1.4M17.3 6.7l1.4-1.4"/>',
+  Otoño: '<path d="M4.5 19.5C4.5 10.5 10 5 19.5 4.5c-.5 9.5-6 15-15 15z"/><path d="M4.5 19.5 14 10"/><path d="M9.5 14.5H13M12 12V8.5"/>',
+  Invierno: '<path d="M12 2.5v19M3.8 7.25l16.4 9.5M3.8 16.75l16.4-9.5"/><path d="m9.5 4 2.5 2 2.5-2M9.5 20l2.5-2 2.5 2M4 11.3l3 .7-1 2.9M20 12.7l-3-.7 1-2.9M4 12.7l3-.7-1-2.9M20 11.3l-3 .7 1 2.9"/>'
+};
+const seasHtml = p => seasOf(p).length ? `<span class="seas">${seasOf(p).map(e=>`<span class="ses e-${norm(e)}" role="img" title="${e}" aria-label="${e}"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${SEASON_ICON[e]}</svg></span>`).join("")}</span>` : "";
 function cardHtml(p){
   return `<article class="card">
-    ${newHtml(p)}${wellHtml(p)}
+    ${newHtml(p)}${seasHtml(p)}${wellHtml(p)}
     ${p.b?`<p class="brand-line">${esc(p.b)}</p>`:""}
     <h3>${esc(p.n)}${isNew(p) ? `<span class="sr"> (nuevo)</span>` : ""}</h3>
     <p class="notes">${esc((p.notes||"").split("·").map(x=>x.trim()).join(", "))}</p>
@@ -762,7 +795,7 @@ const featHtml = (p, k, copy) => {
   // only the first bottles of the main copy rise in one after another; everything else is simply visible
   const reveal = main && k < 6 ? ` data-reveal style="--d:${k*70}ms"` : "";
   return `<article class="fitem"${reveal}${main ? "" : ' aria-hidden="true"'}>
-    ${newHtml(p)}${wellHtml(p).replace('<button class="well"', `<button class="well"${skip}`)}
+    ${newHtml(p)}${seasHtml(p)}${wellHtml(p).replace('<button class="well"', `<button class="well"${skip}`)}
     <p class="brand-line">${esc(p.b||"")}</p>
     <h3>${esc(p.n)}</h3>
     <div class="fprice">${priceHtml(p)}</div>
@@ -872,9 +905,10 @@ function render(){
   SECTIONS.forEach(s=>{
     if(line !== "Todos" && line !== s) return;
     let items = DATA.filter(p=>p.s===s
-      && (!q || norm(p.n+" "+(p.b||"")+" "+(p.notes||"")+" "+famOf(p).join(" ")).includes(q))
+      && (!q || norm(p.n+" "+(p.b||"")+" "+(p.notes||"")+" "+famOf(p).join(" ")+" "+seasOf(p).join(" ")).includes(q))
       && (!brands.size || brands.has(p.b))
       && (!fams.size || famOf(p).some(f=>fams.has(f)))
+      && (!seas.size || seasOf(p).some(e=>seas.has(e)))
       && p.c <= maxPrice);
     if(SORTERS[sortBy]) items = items.slice().sort(SORTERS[sortBy]);
     if(!items.length) return;
@@ -883,7 +917,7 @@ function render(){
   });
   $("list").innerHTML = html || `<div class="empty"><p>No hay perfumes con esos filtros.</p><button class="btn" type="button" onclick="clearFilters()">Limpiar filtros</button></div>`;
   $("resCount").textContent = total === 1 ? "1 perfume" : total + " perfumes";
-  const active = brands.size + fams.size + (maxPrice < PMAX ? 1 : 0) + (sortBy !== "rec" ? 1 : 0);
+  const active = brands.size + fams.size + seas.size + (maxPrice < PMAX ? 1 : 0) + (sortBy !== "rec" ? 1 : 0);
   setBadge(active);
   animateCards();
 }
@@ -954,25 +988,43 @@ new MutationObserver(fabSync).observe(zoom, {attributeFilter:["open"]});
 let fabRT = 0;
 addEventListener("resize", ()=>{ clearTimeout(fabRT); fabRT = setTimeout(fabWatch, 150); });
 
-// encontrá tu aroma: three questions, then the 2–3 perfumes in stock that match best.
-// Score: the chosen aroma as main family 2, as second family 1; the exact line adds 1. Budget is a hard limit,
-// relaxed (and said so) only if fewer than 2 perfumes are left. Budget steps come from today's prices.
-const prices = DATA.map(p=>p.c).sort((a,b)=>a-b), cut = q => Math.ceil(prices[Math.floor((prices.length-1)*q)]/5000)*5000;
-const BUDGET = [...new Set([cut(1/3), cut(2/3)])].filter(v=>v < PMAX).map(v=>[`Hasta ${fmt(v)}`, v]).concat([["No importa", Infinity]]);
+// encontrá tu aroma: four questions (for whom, season, aroma, budget), then the 2–3 perfumes in stock that match best.
+// Line and season are fixed: only perfumes of that line (Mujer/Hombre also bring Unisex) that have the chosen season,
+// main or second. The aroma question only offers aromas with at least 2 such perfumes, so the result never has to
+// leave the season; a season with no aroma left is not offered either. Score: the aroma as main family 2, as second
+// family 1; the exact line adds 1; the season as main 1, as second 0.5. Budget is the only limit that is relaxed
+// (and said so) when fewer than 2 perfumes are left.
+// Budget steps: the cash prices split in three groups of about the same size, rounded to thousands and at least
+// $10.000 apart, recalculated on every build from the day's prices.
+const BUDGET = (() => {
+  const pr = DATA.map(p=>p.c).sort((a,b)=>a-b), n = pr.length, k = q => Math.round(pr[Math.ceil(n*q)-1]/1000)*1000;
+  let lo = k(1/3), hi = k(2/3);
+  if(hi - lo < 10000){ lo = Math.round(((lo+hi)/2 - 5000)/1000)*1000; hi = lo + 10000; }
+  if(lo < PMIN){ lo = Math.ceil(PMIN/1000)*1000; hi = Math.max(hi, lo + 10000); }
+  return [lo, hi].filter(v=>v < PMAX).map(v=>[`Hasta ${fmt(v)}`, v]).concat([["No importa", Infinity]]);
+})();
 const AROMAS = [["Dulce y cálido",["Dulces"]],["Fresco y limpio",["Frescos","Cítricos"]],["Frutal",["Frutales"]],["Floral",["Florales"]],["Intenso: madera y especias",["Amaderados","Especiados"]]]
   .filter(([,f])=>f.some(x=>FAMS.includes(x)));
+const WHO = [["Mujer",{lines:["MUJER","UNISEX"],pref:"MUJER"}],["Hombre",{lines:["HOMBRE","UNISEX"],pref:"HOMBRE"}],["Unisex",{lines:["UNISEX"],pref:"UNISEX"}]];
+const fits = (who, season) => DATA.filter(p=>who.lines.includes(p.s) && seasOf(p).includes(season));
+const aromasFor = (who, season) => { const pool = fits(who, season); return AROMAS.filter(([,f])=>pool.filter(p=>famOf(p).some(x=>f.includes(x))).length >= 2); };
+// each question's options can depend on the earlier answers
 const QUIZ = [
-  // Mujer and Hombre also bring Unisex, but their own line scores 1 more; Unisex brings only Unisex
-  ["¿Para quién es?", [["Mujer",{lines:["MUJER","UNISEX"],pref:"MUJER"}],["Hombre",{lines:["HOMBRE","UNISEX"],pref:"HOMBRE"}],["Unisex",{lines:["UNISEX"],pref:"UNISEX"}]]],
-  ["¿Qué aroma te gusta más?", AROMAS],
-  ["¿Cuánto querés gastar? (precio de contado)", BUDGET]
+  ["¿Para quién es?", () => WHO],
+  ["¿Para cuándo lo querés?", ([who]) => SEASONS.filter(e=>aromasFor(who, e).length).map(e=>[e, e])],
+  ["¿Qué aroma te gusta más?", ([who, season]) => aromasFor(who, season)],
+  ["¿Cuánto querés gastar? (precio de contado)", () => BUDGET]
 ];
-let qStep = -1, qAns = [];
-function recommend([who, fam, max]){
-  const score = p => { const f = famOf(p); const s = fam.includes(f[0]) ? 2 : f.some(x=>fam.includes(x)) ? 1 : 0; return s && p.s === who.pref ? s + 1 : s; };
+let qStep = -1, qAns = [], qOpts = [];
+function recommend([who, season, fam, max]){
+  const score = p => {
+    const f = famOf(p), e = seasOf(p);
+    const s = fam.includes(f[0]) ? 2 : f.some(x=>fam.includes(x)) ? 1 : 0;
+    return s && s + (p.s === who.pref ? 1 : 0) + (e[0] === season ? 1 : 0.5);
+  };
   const rank = list => list.map(p=>[p,score(p)]).filter(([,s])=>s>0)
     .sort((x,y)=>y[1]-x[1] || !!IMGS[y[0].i] - !!IMGS[x[0].i] || x[0].c - y[0].c).map(([p])=>p);
-  const pool = DATA.filter(p=>!who.lines || who.lines.includes(p.s));
+  const pool = fits(who, season);
   let res = rank(pool.filter(p=>p.c <= max)), note = "";
   if(res.length < 2 && max < Infinity){
     const all = rank(pool);
@@ -984,7 +1036,7 @@ function renderQuiz(){
   const body = $("quizBody");
   if(qStep < 0){ body.innerHTML = `<button class="btn primary" id="quizStart" type="button">Empezar</button>`; return; }
   if(qStep < QUIZ.length){
-    const [q, opts] = QUIZ[qStep];
+    const [q, optsFor] = QUIZ[qStep], opts = qOpts = optsFor(qAns);
     body.innerHTML = `<div class="quiz-step"><p class="quiz-prog num">Pregunta ${qStep+1} de ${QUIZ.length}</p><h3 tabindex="-1">${q}</h3>
       <div class="chips">${opts.map(([l],k)=>`<button class="chip" type="button" data-o="${k}">${esc(l)}</button>`).join("")}</div>
       ${qStep ? `<div class="quiz-nav"><button class="btn" type="button" data-q="back">Atrás</button></div>` : ""}</div>`;
@@ -1001,7 +1053,7 @@ function renderQuiz(){
 $("quizBody").addEventListener("click", e=>{
   const b = e.target.closest("button"); if(!b) return;
   if(b.id === "quizStart"){ qStep = 0; qAns = []; }
-  else if(b.dataset.o){ qAns[qStep] = QUIZ[qStep][1][+b.dataset.o][1]; qStep++; }
+  else if(b.dataset.o){ qAns[qStep] = qOpts[+b.dataset.o][1]; qAns.length = qStep + 1; qStep++; }
   else if(b.dataset.q === "back") qStep--;
   else if(b.dataset.q === "again"){ qStep = 0; qAns = []; }
   else return;

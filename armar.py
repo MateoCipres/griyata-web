@@ -7,7 +7,7 @@ def b64(p, m):
 d = json.load(open('fuente/data.json', encoding='utf8'))
 MIME = {'avif': 'image/avif', 'jpg': 'image/jpeg', 'png': 'image/png', 'webp': 'image/webp'}
 data = [dict(i=i, s=p['s'], n=p['n'], b=p.get('b', ''), c=p['c'], t=p['t'], notes=p['notes'],
-             fam=p.get('fam', []), ing=p.get('ing', '')) for i, p in enumerate(d)]
+             fam=p.get('fam', []), ing=p.get('ing', ''), est=p.get('est', [])) for i, p in enumerate(d)]
 imgs = {i: b64('fuente/fotos/' + p['foto'], MIME[p['foto'].rsplit('.', 1)[1]]) for i, p in enumerate(d) if p.get('foto')}
 t = open('fuente/plantilla.html', encoding='utf8').read()
 t = (t.replace('__LOGO__', b64('fuente/logo.png', 'image/png'))

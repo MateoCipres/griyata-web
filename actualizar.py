@@ -52,6 +52,24 @@ def familias(celda):
     return vistas
 
 
+ESTACIONES = ('Primavera', 'Verano', 'Otoño', 'Invierno')
+
+
+def estaciones(celda, nombre):
+    """'Otoño, Invierno' → ['Otoño', 'Invierno'] (la primera es la principal). Lo que no sea una de las 4, escrito
+    exactamente así, se avisa y no se muestra."""
+    vistas = []
+    for e in (celda or '').split(','):
+        e = e.strip()
+        if not e:
+            continue
+        if e not in ESTACIONES:
+            print('Estación mal escrita para %s: %r (uso Primavera, Verano, Otoño o Invierno)' % (nombre, e))
+        elif e not in vistas:
+            vistas.append(e)
+    return vistas[:2]
+
+
 def fecha(celda, nombre):
     """dd/mm/aaaa (o aaaa-mm-dd) → aaaa-mm-dd; vacía o ilegible → ''"""
     celda = (celda or '').strip()
@@ -70,14 +88,15 @@ def fecha(celda, nombre):
     return '%04d-%02d-%02d' % (a, mes, d)
 
 
-# ---------- hoja Fotos: nombre → link, notas, marca, familia, fecha de ingreso ----------
+# ---------- hoja Fotos: nombre → link, notas, marca, familia, fecha de ingreso, estación ----------
 fotos = {}
 for fila in leer_csv(CONFIG['fotos_csv'])[1:]:
-    fila += [''] * (6 - len(fila))
-    nombre, link, notas, marca, familia, ingreso = (x.strip() for x in fila[:6])
+    fila += [''] * (7 - len(fila))
+    nombre, link, notas, marca, familia, ingreso, estacion = (x.strip() for x in fila[:7])
     if nombre:
         fotos[nombre.lower()] = {'link': link, 'notas': notas, 'marca': marca,
-                                 'familia': familias(familia), 'ingreso': fecha(ingreso, nombre)}
+                                 'familia': familias(familia), 'ingreso': fecha(ingreso, nombre),
+                                 'estacion': estaciones(estacion, nombre)}
 
 # ---------- hoja Catálogo: líneas y perfumes disponibles ----------
 perfumes, linea = [], None
@@ -94,7 +113,8 @@ for fila in leer_csv(CONFIG['catalogo_csv']):
     perfumes.append({'s': linea, 'n': nombre, 'c': contado, 't': tarjeta,
                      'notes': fila[4].strip() or extra.get('notas', ''),
                      'b': extra.get('marca', ''), 'img': extra.get('link', ''),
-                     'fam': extra.get('familia', []), 'ing': extra.get('ingreso', '')})
+                     'fam': extra.get('familia', []), 'ing': extra.get('ingreso', ''),
+                     'est': extra.get('estacion', [])})
 
 if len(perfumes) < 3:
     sys.exit('La planilla trajo %d perfumes; parece un error, no actualizo nada.' % len(perfumes))
