@@ -191,25 +191,6 @@
  },
  {
   "s": "MUJER",
-  "n": "Yara",
-  "c": 83005,
-  "t": 99606,
-  "notes": "Orquídea · Frutas tropicales · Vainilla",
-  "b": "Lattafa",
-  "img": "https://fimgs.net/mdimg/perfume-thumbs/dark-375x500.76880.avif",
-  "fam": [
-   "Dulces",
-   "Frutales"
-  ],
-  "ing": "",
-  "est": [
-   "Primavera",
-   "Otoño"
-  ],
-  "foto": "76880.avif"
- },
- {
-  "s": "MUJER",
   "n": "Yara Moi",
   "c": 76365,
   "t": 91638,
@@ -226,25 +207,6 @@
    "Otoño"
   ],
   "foto": "80722.avif"
- },
- {
-  "s": "MUJER",
-  "n": "Yara candy",
-  "c": 82040,
-  "t": 98448,
-  "notes": "Grosella negra · Caramelo de frutilla · Vainilla",
-  "b": "Lattafa",
-  "img": "https://fimgs.net/mdimg/perfume-thumbs/dark-375x500.95752.2x.avif",
-  "fam": [
-   "Dulces",
-   "Frutales"
-  ],
-  "ing": "2026-10-29",
-  "est": [
-   "Primavera",
-   "Verano"
-  ],
-  "foto": "eca73ed138bd.avif"
  },
  {
   "s": "MUJER",
