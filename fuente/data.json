@@ -570,25 +570,6 @@
  },
  {
   "s": "HOMBRE",
-  "n": "Hawas ice",
-  "c": 98285,
-  "t": 117942,
-  "notes": "Manzana · Cardamomo · Musgo",
-  "b": "Rasasi",
-  "img": "https://fimgs.net/mdimg/perfume-thumbs/dark-375x500.89050.avif",
-  "fam": [
-   "Frescos",
-   "Especiados"
-  ],
-  "ing": "",
-  "est": [
-   "Verano",
-   "Primavera"
-  ],
-  "foto": "89050.avif"
- },
- {
-  "s": "HOMBRE",
   "n": "Hawas tropical",
   "c": 91845,
   "t": 110214,
